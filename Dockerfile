@@ -1,3 +1,5 @@
-FROM alpine:3.10
+FROM gcr.io/cloud-marketplace-tools/k8s/deployer_helm/onbuild
 
-ENTRYPOINT ["echo", "test"]
+# COPY schema.yaml /tmp/schema.yaml
+
+ENTRYPOINT ["echo", "test2"]
