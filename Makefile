@@ -22,7 +22,7 @@ test-install:
   --deployer=$(REGISTRY)/$(APP_NAME)/deployer:0.1 \
   --parameters='{"name": "test-deployment", "namespace": "test-ns"}'
 
+# copy all the gloo images into the marketplace repo
 .PHONY: docker-mirror
 docker-mirror:
-	docker build -t $(REGISTRY)/gloo:$(GLOO_VERSION) images -f images/gloo.Dockerfile
-	docker push $(REGISTRY)/gloo:$(GLOO_VERSION)
+	./scripts/generate_images.sh
