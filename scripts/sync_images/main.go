@@ -38,7 +38,7 @@ const (
 	GlooSourceVersion        = "0.21.0"
 	// will need to add another one of these when we add another version of the product to the GCP Marketplace
 	GlooDestinationVersion     = "1.0"
-	DestinationRepoRoot        = "gcr.io/solo-io-public/gloo"
+	OrganizationRepoRoot       = "gcr.io/solo-io-public"
 	GlooImageName              = "gloo"
 	DiscoveryImageName         = "discovery"
 	GatewayImageName           = "gateway"
@@ -71,8 +71,8 @@ type SyncImageDefaults struct {
 	// version of the image that will be hosted in the marketplace
 	DestinationVersion string
 	// ex: gcr.io/solo-io-public/solutionName
-	DestinationRepoRoot string
-	SolutionName        string
+	OrganizationRepoRoot string
+	SolutionName         string
 }
 type SyncImageBatch struct {
 	Images   []*ImageToSync
@@ -102,7 +102,7 @@ var syncImageBatch = SyncImageBatch{
 		DefaultSourceVersion: GlooSourceVersion,
 		DefaultSourceRepo:    MainDistributionRepoRoot,
 		DestinationVersion:   GlooDestinationVersion,
-		DestinationRepoRoot:  DestinationRepoRoot,
+		OrganizationRepoRoot: OrganizationRepoRoot,
 		SolutionName:         GlooSolutionName,
 	},
 }
@@ -151,7 +151,7 @@ func sourceSpecForImage(img *ImageToSync, batch *SyncImageDefaults) string {
 	return fmt.Sprintf("%v/%v:%v", repoRoot, img.ImageName, version)
 }
 func mirrorSpecForImage(img *ImageToSync, batch *SyncImageDefaults) string {
-	repoRoot := batch.DestinationRepoRoot
+	repoRoot := batch.OrganizationRepoRoot
 	version := batch.DestinationVersion
 	if img.IsPrimary {
 		return fmt.Sprintf("%v/%v:%v", repoRoot, img.ImageName, version)
