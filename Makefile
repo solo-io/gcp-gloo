@@ -25,4 +25,4 @@ test-install:
 # copy all the gloo images into the marketplace repo
 .PHONY: docker-mirror
 docker-mirror:
-	./scripts/generate_images.sh
+	go run scripts/sync_images/main.go
