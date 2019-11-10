@@ -3,12 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/solo-io/gloo-ee/pkg/log"
 )
 
 func main() {
@@ -35,7 +35,7 @@ func getOptions() *Options {
 const (
 	MainDistributionRepoRoot = "quay.io/solo-io"
 	GlooSolutionName         = "gloo"
-	GlooSourceVersion        = "0.0.21"
+	GlooSourceVersion        = "0.21.0"
 	// will need to add another one of these when we add another version of the product to the GCP Marketplace
 	GlooDestinationVersion     = "1.0"
 	DestinationRepoRoot        = "gcr.io/solo-io-public/gloo"
