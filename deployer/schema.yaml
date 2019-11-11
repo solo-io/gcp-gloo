@@ -18,7 +18,7 @@ properties:
     default: gcr.io/solo-io-public/gloo/services/
   gloo.deployment.image.tag:
     type: string
-    default: 1.0
+    default: "1.0.0-rc2"
   gloo.gloo.deployment.runAsUser:
     type: int
     default: 10101
