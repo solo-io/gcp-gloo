@@ -4,10 +4,12 @@ applicationApiVersion: v1beta1
 properties:
   name:
     type: string
+    default: gloo
     x-google-marketplace:
       type: NAME
   namespace:
     type: string
+    default: gloo-system
     x-google-marketplace:
       type: NAMESPACE
   gloo.deployment.image.repository:
