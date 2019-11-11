@@ -12,6 +12,13 @@ properties:
     default: gloo-system
     x-google-marketplace:
       type: NAMESPACE
+  apiServer.deployment.envoy.image.pullPolicy:
+    type: string
+  gloo.gatewayProxies.gatewayProxyV2.configMap.data:
+    type: string
+  gloo.deployment.apiServer.repository:
+    type: string
+    default: apiserver
   gloo.deployment.image.repository:
     type: string
     default: gloo
@@ -33,6 +40,9 @@ properties:
   gloo.gatewayProxies.podTemplate.runAsUser:
     type: int
     default: 10101
+  # gloo.gatewayProxies.gatewayProxyV2.configMap.data:
+  #   type: object
+  #   default: null
 required:
 - name
 - namespace
