@@ -1,0 +1,8 @@
+name: test-deployment
+namespace: test-ns
+wordpress:
+  image:
+    registry: gcr.io
+    repository: solo-io-public/gloo
+    tag: 0.21.0
+wordpressImage: gcr.io/solo-io-public/gloo:0.21.0R

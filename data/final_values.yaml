@@ -1,0 +1,9 @@
+gloo-mp.deployment.image.registry: gcr.io/solo-io-public/gloo/services/
+gloo-mp.deployment.image.tag: '1.0'
+gloo-mp.deployment.runAsUser: 10102
+gloo-mp.gateway.deployment.runAsUser: 10101
+gloo-mp.gatewayProxies.podTemplate.runAsUser: 10101
+gloo-mp.gloo.deployment.image.repository: gloo
+name: gloo
+namespace: gloo-system
+namespaceprop.create: false

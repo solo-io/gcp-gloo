@@ -4,31 +4,39 @@ applicationApiVersion: v1beta1
 properties:
   name:
     type: string
+    default: gloo
     x-google-marketplace:
       type: NAME
   namespace:
     type: string
+    default: gloo-system
     x-google-marketplace:
       type: NAMESPACE
+  namespaceprop.create:
+    type: boolean
+    default: false
   gloo-mp.gloo.deployment.image.repository:
     type: string
     default: gloo
-  gloo-mp.gloo.deployment.image.registry:
+  gloo-mp.gloo.deployment.image.repository:
+    type: string
+    default: gloo
+  gloo-mp.deployment.image.registry:
     type: string
     default: gcr.io/solo-io-public/gloo/services/
-  gloo-mp.gloo.deployment.image.tag:
+  gloo-mp.deployment.image.tag:
     type: string
-    default: 1.0
-  gloo-mp.gloo.gloo.deployment.runAsUser:
+    default: "1.0"
+  gloo-mp.deployment.runAsUser:
+    type: int
+    default: 10102
+  # gloo-mp.discovery.deployment.runAsUser:
+  #   type: int
+  #   default: 10101
+  gloo-mp.gateway.deployment.runAsUser:
     type: int
     default: 10101
-  gloo-mp.gloo.discovery.deployment.runAsUser:
-    type: int
-    default: 10101
-  gloo-mp.gloo.gateway.deployment.runAsUser:
-    type: int
-    default: 10101
-  gloo-mp.gloo.gatewayProxies.podTemplate.runAsUser:
+  gloo-mp.gatewayProxies.podTemplate.runAsUser:
     type: int
     default: 10101
 required:
