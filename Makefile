@@ -8,7 +8,7 @@ GLOO_VERSION := 0.21.0
 
 .PHONY: docker-push
 docker-push:
-	docker build -t $(DEPLOYER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION) .
+	docker build -t $(DEPLOYER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION) -f deployer/Dockerfile deployer
 	docker push $(DEPLOYER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION)
 
 .PHONY: mpdev-doctor

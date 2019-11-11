@@ -1,0 +1,16 @@
+dependencies:
+- name: gloo
+  repository: https://storage.googleapis.com/solo-public-helm
+  version: 0.20.13
+- condition: prometheus.enabled
+  name: prometheus
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  tags:
+  - monitoring
+  version: 8.4.1
+- condition: grafana.defaultInstallationEnabled
+  name: grafana
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  tags:
+  - monitoring
+  version: 1.25.1
