@@ -3,7 +3,7 @@ REGISTRY := gcr.io/solo-io-public
 APP_NAME := gloo
 DEPLOYER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/deployer
 INSTALLER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/installer
-TMPSUF := aa
+TMPSUF := ac
 DEPLOYER_IMAGE_VERSION := 1.1$(TMPSUF)
 
 GLOO_VERSION := 1.0.0
@@ -32,7 +32,7 @@ test-install:
 	helm template chart/glooctlinstaller/ --name test --namespace $(TEST_NS) --set rbac=true,marketplacResources=false | kubectl apply -f -
 	mpdev /scripts/install \
   --deployer=$(REGISTRY)/$(APP_NAME)/deployer:$(DEPLOYER_IMAGE_VERSION) \
-  --parameters='{"name": "test-install", "namespace": "$(TEST_NS)", "enterpriseLicense": "psst", "glooctlinstaller.abc": "xyz"}'
+  --parameters='{"name": "test-install", "namespace": "$(TEST_NS)"}'
 
 # copy all the gloo images into the marketplace repo
 .PHONY: docker-mirror

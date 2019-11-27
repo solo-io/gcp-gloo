@@ -9,7 +9,8 @@ rbac: false
 # it is on by default
 marketplaceResources: true
 
-enterpriseLicense: "set-by-marketplace"
+# enterpriseLicense: "set-by-marketplace"
+enterpriseLicense: "eyJleHAiOjE1Nzc0MDg4NzYsImlhdCI6MTU3NDgxNjg3NiwiayI6IjhHWmFQZyIsImx0IjoidHJpYWwifQ.N626YnEFE2Gh_LTt4XL3iqUXkh50M_q_dBfDVI5ITG8"
 
 glooctlInstaller:
   serviceAccount: glooctl-installer

@@ -19,7 +19,7 @@ spec:
           - "gateway"
           {{- if .Values.enterpriseLicense }}
           - "enterprise"
-          - "--license"
+          - "--license-key"
           - {{ .Values.enterpriseLicense }}
           {{- end }}
           - "--namespace"
