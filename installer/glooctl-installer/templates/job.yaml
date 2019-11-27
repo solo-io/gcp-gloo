@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: gloo-installer
+  namespace: gloo-temp
+spec:
+  template:
+    spec:
+      serviceAccount: {{ .Values.glooctlInstaller.serviceAccount }}
+      containers:
+      - name: glooctl-installer
+        image: {{ .Values.glooctlInstaller.image.repository }}:{{ .Values.glooctlInstaller.image.tag }}
+        command: 
+          - "sleep"
+          - "6000"
+          # - "glooctl"
+          # - "install"
+          # - "gateway"
+          # # - "--dry-run"
+          # - "--namespace"
+          # - "gloo-temp"
+          # - "--file"
+          # - "/var/gloo/gloo-1.0.0.tgz"
+      restartPolicy: Never
+  backoffLimit: 4
