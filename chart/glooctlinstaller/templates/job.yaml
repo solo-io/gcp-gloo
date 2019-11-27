@@ -1,3 +1,4 @@
+{{- if .Values.marketplaceResources }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -23,3 +24,4 @@ spec:
           # - "/var/gloo/gloo-1.0.0.tgz"
       restartPolicy: Never
   backoffLimit: 4
+{{- end }}

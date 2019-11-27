@@ -1,9 +1,9 @@
-{{- with .Values.rbac }}
+{{- if .Values.rbac }}
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
     name: glooctl-installer
-    namespace: gloo-temp
+    namespace: {{ .Release.Namespace }}
     labels:
         app: gloo
         gloo: rbac
@@ -35,7 +35,7 @@ kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
     name: glooctl-installer
-    namespace: gloo-temp
+    namespace: {{ .Release.Namespace }}
     labels:
         app: gloo
         gloo: rbac
@@ -60,14 +60,14 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: glooctl-installer
-  namespace: gloo-temp
+  namespace: {{ .Release.Namespace }}
   labels:
     app: gloo
     gloo: rbac
 subjects:
 - kind: ServiceAccount
   name: glooctl-installer
-  namespace: gloo-temp
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
   name: glooctl-installer
@@ -83,8 +83,8 @@ metadata:
     gloo: rbac
 subjects:
 - kind: ServiceAccount
-  name: glooctl-installer
-  namespace: gloo-temp
+  name: {{ .Values.glooctlInstaller.serviceAccount }}
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: glooctl-installer
@@ -96,6 +96,6 @@ metadata:
   labels:
     app: gloo
     gloo: gloo
-  name: glooctl-installer
-  namespace: gloo-temp
+  name: {{ .Values.glooctlInstaller.serviceAccount }}
+  namespace: {{ .Release.Namespace }}
 {{- end }}
