@@ -1,8 +1,8 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: gloo-installer
-  namespace: gloo-temp
+  name: {{ .Release.Name }}-gloo-installer
+  namespace: {{ .Release.Namespace }}
 spec:
   template:
     spec:
