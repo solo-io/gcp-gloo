@@ -12,16 +12,16 @@ spec:
       - name: glooctl-installer
         image: {{ .Values.glooctlInstaller.image.repository }}:{{ .Values.glooctlInstaller.image.tag }}
         command: 
-          - "sleep"
-          - "6000"
-          # - "glooctl"
-          # - "install"
-          # - "gateway"
-          # # - "--dry-run"
-          # - "--namespace"
-          # - "gloo-temp"
-          # - "--file"
-          # - "/var/gloo/gloo-1.0.0.tgz"
+          # - "sleep"
+          # - "6000"
+          - "glooctl"
+          - "install"
+          - "gateway"
+          # - "--dry-run"
+          - "--namespace"
+          - "gloo-temp"
+          - "--file"
+          - "/var/gloo/gloo-1.0.0.tgz"
       restartPolicy: Never
   backoffLimit: 4
 {{- end }}
