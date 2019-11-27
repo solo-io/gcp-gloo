@@ -9,6 +9,16 @@ properties:
     type: string
     x-google-marketplace:
       type: NAMESPACE
+# accessible as: {{ .Values.enterpriseLicense }}
+  enterpriseLicense:
+    type: string
+    default: from-default
+    x-google-marketplace:
+      type: STRING
+      string:
+        generatedProperties:
+# accessible as {{ .Values.enterpriseLicenseEncoded }}
+          base64Encoded: enterpriseLicenseEncoded
 
 required:
 - name

@@ -17,7 +17,11 @@ spec:
           - "glooctl"
           - "install"
           - "gateway"
-          # - "--dry-run"
+          {{- if .Values.enterpriseLicense }}
+          - "enterprise"
+          - "--license"
+          - {{ .Values.enterpriseLicense }}
+          {{- end }}
           - "--namespace"
           - {{ .Release.Namespace }}
           - "--file"
