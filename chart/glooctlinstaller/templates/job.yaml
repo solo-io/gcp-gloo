@@ -19,7 +19,7 @@ spec:
           - "gateway"
           # - "--dry-run"
           - "--namespace"
-          - "gloo-temp"
+          - {{ .Release.Namespace }}
           - "--file"
           - "/var/gloo/gloo-1.0.0.tgz"
       restartPolicy: Never
