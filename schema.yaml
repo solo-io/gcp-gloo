@@ -12,7 +12,7 @@ properties:
 # accessible as: {{ .Values.enterpriseLicense }}
   enterpriseLicense:
     type: string
-    default: from-default
+    default: ""
     x-google-marketplace:
       type: STRING
       string:

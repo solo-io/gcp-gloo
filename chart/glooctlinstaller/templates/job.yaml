@@ -21,13 +21,39 @@ spec:
           - "enterprise"
           - "--license-key"
           - {{ .Values.enterpriseLicense }}
+          - "--file"
+          - "/var/gloo/gloo-ee-1.0.0.tgz"
+          {{- else }}
+          - "--file"
+          - "/var/gloo/gloo-1.0.0.tgz"
+          {{- end }}
+          # - "--dry-run"
+          - "--namespace"
+          - {{ .Release.Namespace }}
+      {{- if .Values.debug }}
+      - name: glooctl-installer-debug
+        image: {{ .Values.glooctlInstaller.image.repository }}:{{ .Values.glooctlInstaller.image.tag }}
+        command:
+          - "echo"
+          - "parameters, enterpriseLicense: "
+          - {{ .Values.enterpriseLicense }}
+          - "this is what will run:"
+          - "glooctl"
+          - "install"
+          - "gateway"
+          {{- if .Values.enterpriseLicense }}
+          - "enterprise"
+          - "--license-key"
+          - {{ .Values.enterpriseLicense }}
+          - "--file"
+          - "/var/gloo/gloo-ee-1.0.0.tgz"
+          {{- else }}
+          - "--file"
+          - "/var/gloo/gloo-1.0.0.tgz"
           {{- end }}
           - "--namespace"
           - {{ .Release.Namespace }}
-          - "--file"
-          - "/var/gloo/gloo-1.0.0.tgz"
-      {{- if .Values.debug }}
-      - name: glooctl-installer-debug
+      - name: glooctl-installer-debug-sleep
         image: {{ .Values.glooctlInstaller.image.repository }}:{{ .Values.glooctlInstaller.image.tag }}
         command: 
           - "sleep"
