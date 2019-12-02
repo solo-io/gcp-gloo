@@ -16,6 +16,6 @@ glooctlInstaller:
   serviceAccount: glooctl-installer
   image:
     repository: gcr.io/solo-io-public/gloo/installer
-    tag: "1.1aq"
+    tag: "1.1at"
     pullPolicy: IfNotPresent
 

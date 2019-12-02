@@ -7,7 +7,7 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccount: {{ .Values.glooctlInstaller.serviceAccount }}
+      serviceAccount: {{ .Values.glooctlServiceAccount }}
       containers:
       - name: glooctl-installer
         image: {{ .Values.glooctlInstaller.image.repository }}:{{ .Values.glooctlInstaller.image.tag }}

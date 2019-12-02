@@ -3,7 +3,7 @@ REGISTRY := gcr.io/solo-io-public
 APP_NAME := gloo
 DEPLOYER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/deployer
 INSTALLER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/installer
-TMPSUF := aq
+TMPSUF := at
 DEPLOYER_IMAGE_VERSION := 1.1$(TMPSUF)
 
 GLOO_VERSION := 1.0.0
@@ -32,7 +32,7 @@ TEST_NS:=test-ns-1$(TMPSUF)
 test-install:
 	kubectl create namespace $(TEST_NS)
 # for now, do this to create the service accounts needed for the installer
-	helm template chart/glooctlinstaller/ --name test --namespace $(TEST_NS) --set rbac=true,marketplaceResources=false | kubectl apply -f -
+#	helm template chart/glooctlinstaller/ --name test --namespace $(TEST_NS) --set rbac=true,marketplaceResources=false | kubectl apply -f -
 # note that we can subsitute name and namespace only
 # other values will be set from defaults during the below test command:
 	mpdev /scripts/install \
