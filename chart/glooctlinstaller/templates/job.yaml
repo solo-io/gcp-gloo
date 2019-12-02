@@ -26,6 +26,13 @@ spec:
           - {{ .Release.Namespace }}
           - "--file"
           - "/var/gloo/gloo-1.0.0.tgz"
+      {{- if .Values.debug }}
+      - name: glooctl-installer-debug
+        image: {{ .Values.glooctlInstaller.image.repository }}:{{ .Values.glooctlInstaller.image.tag }}
+        command: 
+          - "sleep"
+          - "6000"
+      {{- end }}
       restartPolicy: Never
   backoffLimit: 4
 {{- end }}

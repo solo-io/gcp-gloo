@@ -23,3 +23,12 @@ Rationale:
     - The deployer deploys the Job
     - GCP Marketplace flow installs the crds and other restricted resources
     - The Job installs the resources
+
+
+# Overview
+
+- Deployer launches a Job
+- Job runs glooctl to install either Gloo or Gloo-E
+  - if a license is provided, install Gloo-E
+  - otherwise install Gloo
+
