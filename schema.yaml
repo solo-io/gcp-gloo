@@ -1,4 +1,3 @@
-# PLACEHOLDER v-mk
 applicationApiVersion: v1beta1
 
 properties:
@@ -10,27 +9,17 @@ properties:
     type: string
     x-google-marketplace:
       type: NAMESPACE
-  gloo-mp.gloo.deployment.image.repository:
+# accessible as: {{ .Values.enterpriseLicense }}
+  enterpriseLicense:
     type: string
-    default: gloo
-  gloo-mp.gloo.deployment.image.registry:
-    type: string
-    default: gcr.io/solo-io-public/gloo/services/
-  gloo-mp.gloo.deployment.image.tag:
-    type: string
-    default: 1.0
-  gloo-mp.gloo.gloo.deployment.runAsUser:
-    type: int
-    default: 10101
-  gloo-mp.gloo.discovery.deployment.runAsUser:
-    type: int
-    default: 10101
-  gloo-mp.gloo.gateway.deployment.runAsUser:
-    type: int
-    default: 10101
-  gloo-mp.gloo.gatewayProxies.podTemplate.runAsUser:
-    type: int
-    default: 10101
+    default: from-default
+    x-google-marketplace:
+      type: STRING
+      string:
+        generatedProperties:
+# accessible as {{ .Values.enterpriseLicenseEncoded }}
+          base64Encoded: enterpriseLicenseEncoded
+
 required:
 - name
 - namespace
