@@ -4,9 +4,10 @@
 
 # only set this for testing, GCP Marketplace disallows the creation of rbac resources during installation (user should prepare a service account in advance)
 rbac: false
+# debug: true
 
 # for debugging, this gates all the resources released by the marketplace
-# it is on by default
+# it must be on in order to install marketplace resources
 marketplaceResources: true
 
 enterpriseLicense: "set-by-marketplace"
@@ -15,6 +16,6 @@ glooctlInstaller:
   serviceAccount: glooctl-installer
   image:
     repository: gcr.io/solo-io-public/gloo/installer
-    tag: "1.1c"
+    tag: "1.1at"
     pullPolicy: IfNotPresent
 
