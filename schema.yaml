@@ -9,6 +9,11 @@ properties:
     type: string
     x-google-marketplace:
       type: NAMESPACE
+  glooctlInstaller.image.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/installer:1.2
+    x-google-marketplace:
+      type: IMAGE
 # accessible as: {{ .Values.enterpriseLicense }}
   enterpriseLicense:
     type: string

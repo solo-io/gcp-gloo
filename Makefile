@@ -3,8 +3,7 @@ REGISTRY := gcr.io/solo-io-public
 APP_NAME := gloo
 DEPLOYER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/deployer
 INSTALLER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/installer
-TMPSUF := at
-DEPLOYER_IMAGE_VERSION := 1.1$(TMPSUF)
+DEPLOYER_IMAGE_VERSION := 1.2
 
 GLOO_VERSION := 1.0.0
 
@@ -27,7 +26,7 @@ mpdev-doctor:
 	REGISTRY=$(REGISTRY) mpdev doctor
 
 # TEST_NS:=test-ns-$(DEPLOYER_IMAGE_VERSION)
-TEST_NS:=test-ns-1$(TMPSUF)
+TEST_NS:=test-ns-1-2
 .PHONY: test-install
 test-install:
 	kubectl create namespace $(TEST_NS)
