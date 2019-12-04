@@ -30,26 +30,56 @@ properties:
     default: gcr.io/solo-io-public/gloo/gloo/discovery:1.2
     x-google-marketplace:
       type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooImages.discovery.registry
+            repo: glooImages.discovery.repository
+            tag: glooImages.discovery.tag
   glooImages.gateway.full:
     type: string
     default: gcr.io/solo-io-public/gloo/gloo/gateway:1.2
     x-google-marketplace:
       type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooImages.gateway.registry
+            repo: glooImages.gateway.repository
+            tag: glooImages.gateway.tag
   glooImages.certgen.full:
     type: string
     default: gcr.io/solo-io-public/gloo/gloo/certgen:1.2
     x-google-marketplace:
       type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooImages.certgen.registry
+            repo: glooImages.certgen.repository
+            tag: glooImages.certgen.tag
   glooImages.gloo-envoy-wrapper.full:
     type: string
     default: gcr.io/solo-io-public/gloo/gloo/gloo-envoy-wrapper:1.2
     x-google-marketplace:
       type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooImages.gloo-envoy-wrapper.registry
+            repo: glooImages.gloo-envoy-wrapper.repository
+            tag: glooImages.gloo-envoy-wrapper.tag
   glooImages.access-logger.full:
     type: string
     default: gcr.io/solo-io-public/gloo/gloo/access-logger:1.2
     x-google-marketplace:
       type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooImages.access-logger.registry
+            repo: glooImages.access-logger.repository
+            tag: glooImages.access-logger.tag
 # accessible as: {{ .Values.enterpriseLicense }}
   enterpriseLicense:
     type: string
