@@ -35,17 +35,16 @@ func getOptions() *Options {
 const (
 	MainDistributionRepoRoot = "quay.io/solo-io"
 	GlooSolutionName         = "gloo"
-	GlooSourceVersion        = "0.21.0"
+	GlooSourceVersion        = "1.1.0"
 	// will need to add another one of these when we add another version of the product to the GCP Marketplace
-	GlooDestinationVersion     = "1.0"
-	OrganizationRepoRoot       = "gcr.io/solo-io-public"
-	GlooImageName              = "gloo"
-	DiscoveryImageName         = "discovery"
-	GatewayImageName           = "gateway"
-	GatewayConversionImageName = "gateway-conversion"
-	CertgenImageName           = "certgen"
-	GlooEnvoyWrapperImageName  = "gloo-envoy-wrapper"
-	AccessLoggerImageName      = "access-logger"
+	GlooDestinationVersion    = "1.1.0"
+	OrganizationRepoRoot      = "gcr.io/solo-io-public"
+	GlooImageName             = "gloo"
+	DiscoveryImageName        = "discovery"
+	GatewayImageName          = "gateway"
+	CertgenImageName          = "certgen"
+	GlooEnvoyWrapperImageName = "gloo-envoy-wrapper"
+	AccessLoggerImageName     = "access-logger"
 )
 
 type ImageToSync struct {
@@ -86,8 +85,6 @@ var imagesToSync = []*ImageToSync{{
 	ImageName: DiscoveryImageName,
 }, {
 	ImageName: GatewayImageName,
-}, {
-	ImageName: GatewayConversionImageName,
 }, {
 	ImageName: CertgenImageName,
 }, {

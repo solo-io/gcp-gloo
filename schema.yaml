@@ -14,6 +14,42 @@ properties:
     default: gcr.io/solo-io-public/gloo/installer:1.2
     x-google-marketplace:
       type: IMAGE
+  glooImages.gloo:
+    type: string
+    default: gcr.io/solo-io-public/gloo/gloo:1.2
+    x-google-marketplace:
+      type: IMAGE
+  #     image:
+  #       generatedProperties:
+  #         splitToRegistryRepoTag:
+  #           registry: glooImages.gloo.registry
+  #           repo: glooImages.gloo.repository
+  #           tag: glooImages.gloo.tag
+  # glooImages.discovery:
+  #   type: string
+  #   default: gcr.io/solo-io-public/gloo/gloo/discovery:1.2
+  #   x-google-marketplace:
+  #     type: IMAGE
+  # glooImages.gateway:
+  #   type: string
+  #   default: gcr.io/solo-io-public/gloo/gloo/gateway:1.2
+  #   x-google-marketplace:
+  #     type: IMAGE
+  # glooImages.certgen:
+  #   type: string
+  #   default: gcr.io/solo-io-public/gloo/gloo/certgen:1.2
+  #   x-google-marketplace:
+  #     type: IMAGE
+  # glooImages.gloo-envoy-wrapper:
+  #   type: string
+  #   default: gcr.io/solo-io-public/gloo/gloo/gloo-envoy-wrapper:1.2
+  #   x-google-marketplace:
+  #     type: IMAGE
+  # glooImages.access-logger:
+  #   type: string
+  #   default: gcr.io/solo-io-public/gloo/gloo/access-logger:1.2
+  #   x-google-marketplace:
+  #     type: IMAGE
 # accessible as: {{ .Values.enterpriseLicense }}
   enterpriseLicense:
     type: string
