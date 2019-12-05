@@ -58,7 +58,7 @@ properties:
             registry: glooImages.certgen.registry
             repo: glooImages.certgen.repository
             tag: glooImages.certgen.tag
-  glooImages.gloo-envoy-wrapper.full:
+  glooImages.glooEnvoyWrapper.full:
     type: string
     default: gcr.io/solo-io-public/gloo/gloo/gloo-envoy-wrapper:1.2
     x-google-marketplace:
@@ -66,10 +66,10 @@ properties:
       image:
         generatedProperties:
           splitToRegistryRepoTag:
-            registry: glooImages.gloo-envoy-wrapper.registry
-            repo: glooImages.gloo-envoy-wrapper.repository
-            tag: glooImages.gloo-envoy-wrapper.tag
-  glooImages.access-logger.full:
+            registry: glooImages.glooEnvoyWrapper.registry
+            repo: glooImages.glooEnvoyWrapper.repository
+            tag: glooImages.glooEnvoyWrapper.tag
+  glooImages.accessLogger.full:
     type: string
     default: gcr.io/solo-io-public/gloo/gloo/access-logger:1.2
     x-google-marketplace:
@@ -77,9 +77,9 @@ properties:
       image:
         generatedProperties:
           splitToRegistryRepoTag:
-            registry: glooImages.access-logger.registry
-            repo: glooImages.access-logger.repository
-            tag: glooImages.access-logger.tag
+            registry: glooImages.accessLogger.registry
+            repo: glooImages.accessLogger.repository
+            tag: glooImages.accessLogger.tag
 # accessible as: {{ .Values.enterpriseLicense }}
   enterpriseLicense:
     type: string
