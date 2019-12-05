@@ -1,4 +1,13 @@
 {{- if .Values.marketplaceResources }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-install-values
+  namespace: {{ .Release.Namespace }}
+data:
+  "marketplace.yaml": >-
+    glootest: test
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -30,6 +39,11 @@ spec:
           # - "--dry-run"
           - "--namespace"
           - {{ .Release.Namespace }}
+          - "--values"
+          - /var/gloo/install-values/marketplace.yaml
+        volumeMounts:
+          - name: values-volume
+            mountPath: /var/gloo/install-values
       {{- if .Values.debug }}
       - name: glooctl-installer-debug
         image: {{ .Values.glooctlInstaller.image.full }}
@@ -59,6 +73,13 @@ spec:
           - "sleep"
           - "6000"
       {{- end }}
+      volumes:
+        - name: values-volume
+          configMap:
+            name: {{ .Release.Name }}-install-values
+            items:
+            - key: "marketplace.yaml"
+              path: "marketplace.yaml"
       restartPolicy: Never
   backoffLimit: 4
 {{- end }}
