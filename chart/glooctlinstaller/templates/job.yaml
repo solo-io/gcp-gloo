@@ -52,7 +52,7 @@ spec:
   template:
     spec:
       serviceAccount: {{ .Values.glooctlServiceAccount }}
-      containers:
+      initContainers:
       - name: glooctl-installer
         image: {{ .Values.glooctlInstaller.image.full }}
         imagePullPolicy: Always
@@ -77,6 +77,25 @@ spec:
         volumeMounts:
           - name: values-volume
             mountPath: /var/gloo/install-values
+      - name: glooctl-installer-own-resources
+        image: {{ .Values.glooctlInstaller.image.full }}
+        imagePullPolicy: Always
+        env:
+          - name: APP_NAME
+            value: {{ .Release.Name }}
+          - name: NAMESPACE
+            value: {{ .Release.Namespace }}
+          - name: TARGET_SELECTOR
+            value: {{ .Release.Namespace }}
+        command: 
+          - "setOwner"
+      containers:
+      - name: glooctl-summary
+        image: {{ .Values.glooctlInstaller.image.full }}
+        imagePullPolicy: Always
+        command: 
+          - "echo"
+          - "Gloo has been installed successfully"
       volumes:
         - name: values-volume
           configMap:

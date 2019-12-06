@@ -1,4 +1,4 @@
-#!/bin/bash -xe
+#!/bin/sh -xe
 
 # This script applies an owner ref to the resources that match the provided selector
 # The owner ref is the Application specified by NAMESPACE and APP_NAME
@@ -6,7 +6,7 @@
 
 # assert parameters
 
-if [ -z $NAMESPACE == "" ]; then
+if [ -z $NAMESPACE ]; then
     echo "must pass NAMESPACE to identify the target namespace"
     exit 1
 fi
