@@ -55,9 +55,8 @@ spec:
       containers:
       - name: glooctl-installer
         image: {{ .Values.glooctlInstaller.image.full }}
+        imagePullPolicy: Always
         command: 
-          # - "sleep"
-          # - "6000"
           - "glooctl"
           - "install"
           - "gateway"
@@ -66,11 +65,11 @@ spec:
           - "--license-key"
           - {{ .Values.enterpriseLicense }}
           - "--file"
-          - "/var/gloo/gloo-ee-1.0.0.tgz"
-          {{- else }}
+          - "/var/gloo/gloo-ee-1.1.0.tgz"
+          {{- else }} # enterpriseLicense
           - "--file"
-          - "/var/gloo/gloo-1.0.0.tgz"
-          {{- end }}
+          - "/var/gloo/gloo-1.1.0.tgz"
+          {{- end }} # enterpriseLicense
           # - "--dry-run"
           - "--namespace"
           - {{ .Release.Namespace }}
@@ -82,6 +81,7 @@ spec:
       {{- if .Values.debug }}
       - name: glooctl-installer-debug
         image: {{ .Values.glooctlInstaller.image.full }}
+        imagePullPolicy: Always
         command:
           - "echo"
           - "this is what will run:"
@@ -102,13 +102,14 @@ spec:
           - {{ .Release.Namespace }}
       - name: glooctl-installer-debug-sleep
         image: {{ .Values.glooctlInstaller.image.full }}
+        imagePullPolicy: Always
         command: 
           - "sleep"
           - "6000"
-        volumeMounts:
-          - name: values-volume
-            mountPath: /var/gloo/install-values
-      {{- end }}
+        # volumeMounts:
+        #   - name: values-volume
+        #     mountPath: /var/gloo/install-values
+      {{- end }} # debug
       volumes:
         - name: values-volume
           configMap:
@@ -118,4 +119,4 @@ spec:
               path: "marketplace.yaml"
       restartPolicy: Never
   backoffLimit: 4
-{{- end }}
+{{- end }} # marketplaceResources

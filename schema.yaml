@@ -16,7 +16,7 @@ properties:
       type: IMAGE
   glooImages.gloo.full:
     type: string
-    default: gcr.io/solo-io-public/gloo/gloo:1.1
+    default: gcr.io/solo-io-public/gloo:1.1.0
     x-google-marketplace:
       type: IMAGE
       image:
@@ -27,7 +27,7 @@ properties:
             tag: glooImages.gloo.tag
   glooImages.discovery.full:
     type: string
-    default: gcr.io/solo-io-public/gloo/gloo/discovery:1.1
+    default: gcr.io/solo-io-public/gloo/discovery:1.1.0
     x-google-marketplace:
       type: IMAGE
       image:
@@ -38,7 +38,7 @@ properties:
             tag: glooImages.discovery.tag
   glooImages.gateway.full:
     type: string
-    default: gcr.io/solo-io-public/gloo/gloo/gateway:1.1
+    default: gcr.io/solo-io-public/gloo/gateway:1.1.0
     x-google-marketplace:
       type: IMAGE
       image:
@@ -49,7 +49,7 @@ properties:
             tag: glooImages.gateway.tag
   glooImages.certgen.full:
     type: string
-    default: gcr.io/solo-io-public/gloo/gloo/certgen:1.1
+    default: gcr.io/solo-io-public/gloo/certgen:1.1.0
     x-google-marketplace:
       type: IMAGE
       image:
@@ -60,7 +60,7 @@ properties:
             tag: glooImages.certgen.tag
   glooImages.glooEnvoyWrapper.full:
     type: string
-    default: gcr.io/solo-io-public/gloo/gloo/gloo-envoy-wrapper:1.1
+    default: gcr.io/solo-io-public/gloo/gloo-envoy-wrapper:1.1.0
     x-google-marketplace:
       type: IMAGE
       image:
@@ -71,7 +71,7 @@ properties:
             tag: glooImages.glooEnvoyWrapper.tag
   glooImages.accessLogger.full:
     type: string
-    default: gcr.io/solo-io-public/gloo/gloo/access-logger:1.1
+    default: gcr.io/solo-io-public/gloo/access-logger:1.1.0
     x-google-marketplace:
       type: IMAGE
       image:
