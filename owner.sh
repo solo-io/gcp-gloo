@@ -1,5 +1,9 @@
 #!/bin/bash -xe
 
+# This script applies an owner ref to the resources that match the provided selector
+# The owner ref is the Application specified by NAMESPACE and APP_NAME
+# Any resources (apart from Pods) which match the --selector=$TARGET_SELECTOR are updated
+
 # assert parameters
 
 if [ -z $NAMESPACE == "" ]; then
@@ -35,15 +39,26 @@ metadata:
 EOM
 )
 
-kubectl patch -n $NAMESPACE deployment gloo --patch "$PATCH"
-exit
-
-# find all the resources created by the Installer using a known selector
-TARGET_META_JSONPATH="{.items[*].metadata.uid}"
-TARGETS=`kubectl get all -n $NAMESPACE --selector=$TARGET_SELECTOR -o jsonpath=$TARGET_META_JSONPATH`
-echo $TARGETS
-kubectl get all -n $NAMESPACE --selector=$TARGET_SELECTOR -o=jsonpath=$TARGET_META_JSONPATH
+# find all the resources created by the installer
+TARGET_META_JSONPATH="{range .items[*]}{.kind},{.metadata.name} {end}"
+TARGETS=`kubectl get all -n $NAMESPACE --selector=$TARGET_SELECTOR -o jsonpath="$TARGET_META_JSONPATH"`
 
 # apply the owner ref to each resource
-kubectl patch -n $NAMESPACE deployment gloo --patch $PATCH
-
+for TARGET in $TARGETS
+do
+    ARR=(`echo $TARGET | tr "," " "`)
+    KIND=${ARR[0]}
+    NAME=${ARR[1]}
+    case $KIND in
+        "Deployment"|"Job"|"ReplicaSet"|"Service")
+            kubectl patch -n $NAMESPACE $KIND $NAME --patch "$PATCH"
+            ;;
+        "Pod")
+            echo "skipping $KIND since owner ref is already handled"
+            ;;
+        *)
+            echo "did not expect this resource - please update script to handle it"
+            exit 1
+            ;;
+    esac
+done
