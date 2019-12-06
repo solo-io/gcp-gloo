@@ -7,13 +7,8 @@ if [ -z $NAMESPACE == "" ]; then
     exit 1
 fi
 
-if [ -z "$OWNER_REF_SOURCE_TYPE" ]; then
-    echo "must pass OWNER_REF_SOURCE_TYPE to identify the type of resource to use when finding the owner ref source"
-    exit 1
-fi
-
-if [ -z "$OWNER_REF_SOURCE_NAME" ]; then
-    echo "must pass OWNER_REF_SOURCE_NAME to identify the name of the resource to use when finding the owner ref source"
+if [ -z "$APP_NAME" ]; then
+    echo "must pass APP_NAME to identify the application which will be used as the owner"
     exit 1
 fi
 
@@ -23,23 +18,24 @@ if [ -z "$TARGET_SELECTOR" ]; then
 fi
 
 
-# get the owner ref spec from the Job
+# get the application uid
+APP_UID_JSONPATH="{.metadata.uid}"
+APP_UID=`kubectl get application $APP_NAME -n $NAMESPACE -o jsonpath=$APP_UID_JSONPATH`
+echo $APP_UID
 
-APP_OWNER_REF_JSONPATH="{.metadata.ownerReferences[0]}"
-SOURCE_OWNER_REF=`kubectl get $OWNER_REF_SOURCE_TYPE $OWNER_REF_SOURCE_NAME -n $NAMESPACE -o jsonpath="${APP_OWNER_REF_JSONPATH}"`
-
-
-JSON_STRING=$( jq -n \
-                  --arg bn "$SOURCE_OWNER_REF" \
-                  '{bucketname: [$bn]}' )
 
 # format it to a patch
-PATCH='{"metadata":{"ownerReferences":'${SOURCE_OWNER_REF}'}}'
-PATCH=$( jq -n \
-                  --arg bn "$SOURCE_OWNER_REF" \
-                  '{"metadata":{"ownerReferences": [$bn]}}' )
-echo $PATCH | jq '.'
-kubectl patch -n $NAMESPACE deployment gloo --patch "$(echo $PATCH | jq '.')"
+PATCH=$(cat << EOM
+metadata:
+  ownerReferences:
+  - apiVersion: app.k8s.io/v1beta1
+    kind: Application
+    name: $APP_NAME
+    uid: $APP_UID
+EOM
+)
+
+kubectl patch -n $NAMESPACE deployment gloo --patch "$PATCH"
 exit
 
 # find all the resources created by the Installer using a known selector
