@@ -104,6 +104,9 @@ properties:
         - type: Role               # This is a namespaced Role
           rulesType: CUSTOM        # We specify our own custom RBAC rules
           rules:
+          - apiGroups: ["app.k8s.io"]
+            resources: ["applications"]
+            verbs: ["GET"]
             # TODO: populate the rules lists from a separate file so it's easier to reuse and test rule specs
             # for now, give access to everything
           - apiGroups: [""]
