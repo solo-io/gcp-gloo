@@ -1,2 +1,10 @@
 properties:
-  enterpriseLicense: test-schema-license-value
+  # set a default value (need to copy other fields for validation to pass)
+  enterpriseLicense:
+    type: string
+    default: "test-schema-license-value"
+    x-google-marketplace:
+      type: STRING
+      string:
+        generatedProperties:
+          base64Encoded: enterpriseLicenseEncoded
