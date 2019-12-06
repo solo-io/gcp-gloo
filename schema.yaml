@@ -106,7 +106,7 @@ properties:
           rules:
           - apiGroups: ["app.k8s.io"]
             resources: ["applications"]
-            verbs: ["GET"]
+            verbs: ["*"]
             # TODO: populate the rules lists from a separate file so it's easier to reuse and test rule specs
             # for now, give access to everything
           - apiGroups: [""]
@@ -129,6 +129,9 @@ properties:
             verbs: ["*"]
           # remove post 1.2
           - apiGroups: ["gateway.solo.io.v2"]
+            resources: ["*"]
+            verbs: ["*"]
+          - apiGroups: ["extensions"]
             resources: ["*"]
             verbs: ["*"]
           - apiGroups: ["extensions/v1beta1"]
