@@ -87,16 +87,9 @@ spec:
           - name: NAMESPACE
             value: {{ .Release.Namespace }}
           - name: TARGET_SELECTOR
-            value: {{ .Release.Namespace }}
+            value: gloo
         command: 
           - "setOwner"
-      # containers:
-      # - name: glooctl-summary
-      #   image: {{ .Values.glooctlInstaller.image.full }}
-      #   imagePullPolicy: Always
-      #   command:
-      #     - "echo"
-      #     - "Gloo has been installed successfully"
       volumes:
         - name: values-volume
           configMap:
