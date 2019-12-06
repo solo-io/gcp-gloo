@@ -20,3 +20,7 @@ RUN mkdir -p /opt/kubectl/1.16 \
         https://storage.googleapis.com/kubernetes-release/release/v1.16.2/bin/linux/amd64/kubectl \
     && chmod 755 /opt/kubectl/1.16/kubectl
 RUN mv /opt/kubectl/1.16/kubectl /bin/kubectl
+
+# script used to set owner refs
+COPY scripts/setOwner /bin/setOwner
+RUN chmod +x /bin/setOwner
