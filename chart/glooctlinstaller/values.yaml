@@ -4,7 +4,6 @@
 
 # only set this for testing, GCP Marketplace disallows the creation of rbac resources during installation (user should prepare a service account in advance)
 rbac: false
-# debug: true
 
 # for debugging, this gates all the resources released by the marketplace
 # it must be on in order to install marketplace resources
@@ -14,8 +13,14 @@ enterpriseLicense: "set-by-marketplace"
 
 glooctlInstaller:
   serviceAccount: glooctl-installer
+  # unlike our common helm charts, we pass the image in full
+  # this is because the marketplace helper splitToRegistryRepoTag produces:
+  #  {registry: solo-io-public, repository: gloo/installer, tag: 1.2}
+  #  and the "gcr.io" prefix is ignored (I expected it in the registry string)
+  #  which means that we either need to restrict alternative images to gcr.io hosts or implement
+  #  an elaborate template function to allow other hosts
   image:
-    repository: gcr.io/solo-io-public/gloo/installer
-    tag: "1.1at"
-    pullPolicy: IfNotPresent
+    # set by marketplace
+    # full: gcr.io/solo-io-public/gloo/installer:1.2
+    pullPolicy: Always
 

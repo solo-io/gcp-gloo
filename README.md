@@ -28,3 +28,8 @@ This repo manages two images and a helm chart for running glooctl
 
 - launches `glooctl` in a Job
 - passes user config from the marketplace schema to `glooctl`
+
+
+# Management
+
+See [repo management doc](./management.md) for notes on how to keep this repo and the GCP Marketplace listing syncronized with Gloo.

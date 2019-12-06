@@ -2,9 +2,9 @@
 FROM gcr.io/cloud-marketplace-tools/k8s/deployer_helm/onbuild
 
 
-RUN wget https://github.com/solo-io/gloo/releases/download/v1.0.0/glooctl-linux-amd64
-RUN chmod +x glooctl-linux-amd64
-RUN mv glooctl-linux-amd64 /bin/glooctl
+# RUN wget https://github.com/solo-io/gloo/releases/download/v1.0.0/glooctl-linux-amd64
+# RUN chmod +x glooctl-linux-amd64
+# RUN mv glooctl-linux-amd64 /bin/glooctl
 
 # # https://github.com/GoogleCloudPlatform/marketplace-k8s-app-tools/blob/master/marketplace/deployer_helm_base/Dockerfile
 # # The base image is using helm v2.8.1 which does not include the kebabcase (sprig) function we need

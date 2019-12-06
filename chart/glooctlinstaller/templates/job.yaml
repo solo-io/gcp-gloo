@@ -1,4 +1,48 @@
 {{- if .Values.marketplaceResources }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-install-values
+  namespace: {{ .Release.Namespace }}
+data:
+  "marketplace.yaml": >-
+    gloo:
+      deployment:
+        image:
+          registry: {{ .Values.glooImages.gloo.registry }}
+          repository: {{ .Values.glooImages.gloo.repository }}
+          tag: {{ .Values.glooImages.gloo.tag }}
+    discovery:
+      deployment:
+        image:
+          registry: {{ .Values.glooImages.discovery.registry }}
+          repository: {{ .Values.glooImages.discovery.repository }}
+          tag: {{ .Values.glooImages.discovery.tag }}
+    gateway:
+      deployment:
+        image:
+          registry: {{ .Values.glooImages.gateway.registry }}
+          repository: {{ .Values.glooImages.gateway.repository }}
+          tag: {{ .Values.glooImages.gateway.tag }}
+      certGenJob:
+        image:
+          registry: {{ .Values.glooImages.certgen.registry }}
+          repository: {{ .Values.glooImages.certgen.repository }}
+          tag: {{ .Values.glooImages.certgen.tag }}
+    accessLogger:
+      deployment:
+        image:
+          registry: {{ .Values.glooImages.accessLogger.registry }}
+          repository: {{ .Values.glooImages.accessLogger.repository }}
+          tag: {{ .Values.glooImages.accessLogger.tag }}
+    gatewayProxies:
+      gatewayProxy:
+        podTemplate:
+          image:
+            registry: {{ .Values.glooImages.glooEnvoyWrapper.registry }}
+            repository: {{ .Values.glooImages.glooEnvoyWrapper.repository }}
+            tag: {{ .Values.glooImages.glooEnvoyWrapper.tag }}
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -10,10 +54,9 @@ spec:
       serviceAccount: {{ .Values.glooctlServiceAccount }}
       containers:
       - name: glooctl-installer
-        image: {{ .Values.glooctlInstaller.image.repository }}:{{ .Values.glooctlInstaller.image.tag }}
+        image: {{ .Values.glooctlInstaller.image.full }}
+        imagePullPolicy: Always
         command: 
-          # - "sleep"
-          # - "6000"
           - "glooctl"
           - "install"
           - "gateway"
@@ -22,43 +65,25 @@ spec:
           - "--license-key"
           - {{ .Values.enterpriseLicense }}
           - "--file"
-          - "/var/gloo/gloo-ee-1.0.0.tgz"
-          {{- else }}
+          - "/var/gloo/gloo-ee-1.1.0.tgz"
+          {{- else }} # enterpriseLicense
           - "--file"
-          - "/var/gloo/gloo-1.0.0.tgz"
-          {{- end }}
-          # - "--dry-run"
+          - "/var/gloo/gloo-1.1.0.tgz"
+          {{- end }} # enterpriseLicense
           - "--namespace"
           - {{ .Release.Namespace }}
-      {{- if .Values.debug }}
-      - name: glooctl-installer-debug
-        image: {{ .Values.glooctlInstaller.image.repository }}:{{ .Values.glooctlInstaller.image.tag }}
-        command:
-          - "echo"
-          - "parameters, enterpriseLicense: "
-          - {{ .Values.enterpriseLicense }}
-          - "this is what will run:"
-          - "glooctl"
-          - "install"
-          - "gateway"
-          {{- if .Values.enterpriseLicense }}
-          - "enterprise"
-          - "--license-key"
-          - {{ .Values.enterpriseLicense }}
-          - "--file"
-          - "/var/gloo/gloo-ee-1.0.0.tgz"
-          {{- else }}
-          - "--file"
-          - "/var/gloo/gloo-1.0.0.tgz"
-          {{- end }}
-          - "--namespace"
-          - {{ .Release.Namespace }}
-      - name: glooctl-installer-debug-sleep
-        image: {{ .Values.glooctlInstaller.image.repository }}:{{ .Values.glooctlInstaller.image.tag }}
-        command: 
-          - "sleep"
-          - "6000"
-      {{- end }}
+          - "--values"
+          - /var/gloo/install-values/marketplace.yaml
+        volumeMounts:
+          - name: values-volume
+            mountPath: /var/gloo/install-values
+      volumes:
+        - name: values-volume
+          configMap:
+            name: {{ .Release.Name }}-install-values
+            items:
+            - key: "marketplace.yaml"
+              path: "marketplace.yaml"
       restartPolicy: Never
   backoffLimit: 4
-{{- end }}
+{{- end }} # marketplaceResources
