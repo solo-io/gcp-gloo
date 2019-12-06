@@ -70,7 +70,6 @@ spec:
           - "--file"
           - "/var/gloo/gloo-1.1.0.tgz"
           {{- end }} # enterpriseLicense
-          # - "--dry-run"
           - "--namespace"
           - {{ .Release.Namespace }}
           - "--values"
@@ -78,38 +77,6 @@ spec:
         volumeMounts:
           - name: values-volume
             mountPath: /var/gloo/install-values
-      {{- if .Values.debug }}
-      - name: glooctl-installer-debug
-        image: {{ .Values.glooctlInstaller.image.full }}
-        imagePullPolicy: Always
-        command:
-          - "echo"
-          - "this is what will run:"
-          - "glooctl"
-          - "install"
-          - "gateway"
-          {{- if .Values.enterpriseLicense }}
-          - "enterprise"
-          - "--license-key"
-          - {{ .Values.enterpriseLicense }}
-          - "--file"
-          - "/var/gloo/gloo-ee-1.0.0.tgz"
-          {{- else }}
-          - "--file"
-          - "/var/gloo/gloo-1.0.0.tgz"
-          {{- end }}
-          - "--namespace"
-          - {{ .Release.Namespace }}
-      - name: glooctl-installer-debug-sleep
-        image: {{ .Values.glooctlInstaller.image.full }}
-        imagePullPolicy: Always
-        command: 
-          - "sleep"
-          - "6000"
-        # volumeMounts:
-        #   - name: values-volume
-        #     mountPath: /var/gloo/install-values
-      {{- end }} # debug
       volumes:
         - name: values-volume
           configMap:

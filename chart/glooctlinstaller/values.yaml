@@ -4,7 +4,6 @@
 
 # only set this for testing, GCP Marketplace disallows the creation of rbac resources during installation (user should prepare a service account in advance)
 rbac: false
-debug: true
 
 # for debugging, this gates all the resources released by the marketplace
 # it must be on in order to install marketplace resources
