@@ -42,6 +42,45 @@ data:
             registry: {{ .Values.glooImages.glooEnvoyWrapper.registry }}
             repository: {{ .Values.glooImages.glooEnvoyWrapper.repository }}
             tag: {{ .Values.glooImages.glooEnvoyWrapper.tag }}
+  ## WORK IN PROGRESS
+  "marketplace-enterprise.yaml": >-
+    gloo:
+      gloo:
+        deployment:
+          image:
+            registry: {{ .Values.glooImages.gloo.registry }}
+            repository: {{ .Values.glooImages.gloo.repository }}
+            tag: {{ .Values.glooImages.gloo.tag }}
+      discovery:
+        deployment:
+          image:
+            registry: {{ .Values.glooImages.discovery.registry }}
+            repository: {{ .Values.glooImages.discovery.repository }}
+            tag: {{ .Values.glooImages.discovery.tag }}
+      gateway:
+        deployment:
+          image:
+            registry: {{ .Values.glooImages.gateway.registry }}
+            repository: {{ .Values.glooImages.gateway.repository }}
+            tag: {{ .Values.glooImages.gateway.tag }}
+        certGenJob:
+          image:
+            registry: {{ .Values.glooImages.certgen.registry }}
+            repository: {{ .Values.glooImages.certgen.repository }}
+            tag: {{ .Values.glooImages.certgen.tag }}
+      accessLogger:
+        deployment:
+          image:
+            registry: {{ .Values.glooImages.accessLogger.registry }}
+            repository: {{ .Values.glooImages.accessLogger.repository }}
+            tag: {{ .Values.glooImages.accessLogger.tag }}
+      gatewayProxies:
+        gatewayProxy:
+          podTemplate:
+            image:
+              registry: {{ .Values.glooImages.glooEnvoyWrapper.registry }}
+              repository: {{ .Values.glooImages.glooEnvoyWrapper.repository }}
+              tag: {{ .Values.glooImages.glooEnvoyWrapper.tag }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -66,14 +105,16 @@ spec:
           - {{ .Values.enterpriseLicense }}
           - "--file"
           - "/var/gloo/gloo-ee-1.1.0.tgz"
+          - "--values"
+          - /var/gloo/install-values/marketplace.yaml
           {{- else }} # enterpriseLicense
           - "--file"
           - "/var/gloo/gloo-1.1.0.tgz"
+          - "--values"
+          - /var/gloo/install-values/marketplace-enterprise.yaml
           {{- end }} # enterpriseLicense
           - "--namespace"
           - {{ .Release.Namespace }}
-          - "--values"
-          - /var/gloo/install-values/marketplace.yaml
         volumeMounts:
           - name: values-volume
             mountPath: /var/gloo/install-values
@@ -97,6 +138,8 @@ spec:
             items:
             - key: "marketplace.yaml"
               path: "marketplace.yaml"
+            - key: "marketplace-enterprise.yaml"
+              path: "marketplace-enterprise.yaml"
       restartPolicy: Never
   backoffLimit: 4
 {{- end }} # marketplaceResources

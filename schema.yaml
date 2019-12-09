@@ -80,6 +80,26 @@ properties:
             registry: glooImages.accessLogger.registry
             repo: glooImages.accessLogger.repository
             tag: glooImages.accessLogger.tag
+## WORK IN PROGRESS
+ # quay.io/solo-io/certgen:0.20.6
+ # quay.io/solo-io/gloo-ee:0.20.4
+ # quay.io/solo-io/discovery:0.20.6
+ # quay.io/solo-io/gateway:0.20.6
+ # quay.io/solo-io/gloo-ee-envoy-wrapper:0.20.4
+ # "busybox:1.30.0"
+ # "grafana/grafana:5.4.3"
+ # "quay.io/coreos/kube-state-metrics:v1.4.0"
+ # "busybox:latest"
+ # "jimmidyson/configmap-reload:v0.2.2"
+ # "prom/prometheus:v2.6.0"
+ # docker.io/redis:5
+ # quay.io/solo-io/rate-limit-ee:0.20.4
+ # quay.io/solo-io/extauth-ee:0.20.4
+ # quay.io/solo-io/grpcserver-ui:0.20.4
+ # quay.io/solo-io/grpcserver-ee:0.20.4
+ # quay.io/solo-io/grpcserver-envoy:0.20.4
+ # quay.io/solo-io/observability-ee:0.20.4
+
 # accessible as: {{ .Values.enterpriseLicense }}
   enterpriseLicense:
     type: string
