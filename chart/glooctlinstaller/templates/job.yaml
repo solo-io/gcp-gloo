@@ -51,8 +51,17 @@ metadata:
 spec:
   template:
     spec:
+      # serviceAccount: temp-mk-setup
+      # serviceAccount: {{ .Release.Namespace }}-deployer-sa
       serviceAccount: {{ .Values.glooctlServiceAccount }}
-      initContainers:
+      # initContainers:
+      containers:
+      # - name: sleeper
+      #   image: {{ .Values.glooctlInstaller.image.full }}
+      #   imagePullPolicy: Always
+      #   command:
+      #     - "sleep"
+      #     - "10000"
       - name: glooctl-installer
         image: {{ .Values.glooctlInstaller.image.full }}
         imagePullPolicy: Always
@@ -60,6 +69,7 @@ spec:
           - "glooctl"
           - "install"
           - "gateway"
+          - "--dry-run"
           {{- if .Values.enterpriseLicense }}
           - "enterprise"
           - "--license-key"
@@ -77,7 +87,7 @@ spec:
         volumeMounts:
           - name: values-volume
             mountPath: /var/gloo/install-values
-      containers:
+      # containers:
       - name: glooctl-installer-own-resources
         image: {{ .Values.glooctlInstaller.image.full }}
         imagePullPolicy: Always

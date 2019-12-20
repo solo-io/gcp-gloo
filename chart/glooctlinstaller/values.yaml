@@ -12,7 +12,7 @@ marketplaceResources: true
 enterpriseLicense: "set-by-marketplace"
 
 glooctlInstaller:
-  serviceAccount: glooctl-installer
+  # serviceAccount: glooctl-installer
   # unlike our common helm charts, we pass the image in full
   # this is because the marketplace helper splitToRegistryRepoTag produces:
   #  {registry: solo-io-public, repository: gloo/installer, tag: 1.2}

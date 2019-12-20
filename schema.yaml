@@ -11,7 +11,7 @@ properties:
       type: NAMESPACE
   glooctlInstaller.image.full:
     type: string
-    default: gcr.io/solo-io-public/gloo/installer:1.1
+    default: gcr.io/solo-io-public/gloo/installer:1.1-ab15
     x-google-marketplace:
       type: IMAGE
   glooImages.gloo.full:
@@ -98,67 +98,77 @@ properties:
       type: SERVICE_ACCOUNT
       serviceAccount:
         roles:
+        - type: ClusterRole        # This is a cluster-wide ClusterRole
+          rulesType: PREDEFINED
+          rulesFromRoleName: temp-mk-setup  # Use predefined role named "edit"
         # - type: ClusterRole        # This is a cluster-wide ClusterRole
         #   rulesType: PREDEFINED
         #   rulesFromRoleName: edit  # Use predefined role named "edit"
-        - type: Role               # This is a namespaced Role
-          rulesType: CUSTOM        # We specify our own custom RBAC rules
-          rules:
-          - apiGroups: ["app.k8s.io"]
-            resources: ["applications"]
-            verbs: ["*"]
-            # TODO: populate the rules lists from a separate file so it's easier to reuse and test rule specs
-            # for now, give access to everything
-          - apiGroups: [""]
-            resources: ["*"]
-            verbs: ["*"]
-          - apiGroups: ["batch"]
-            resources: ["*"]
-            verbs: ["*"]
-          - apiGroups: ["apps"]
-            resources: ["*"]
-            verbs: ["*"]
-          - apiGroups: ["gloo.solo.io"]
-            resources: ["*"]
-            verbs: ["*"]
-          - apiGroups: ["gateway.solo.io"]
-            resources: ["*"]
-            verbs: ["*"]
-          - apiGroups: ["apiextensions.k8s.io/v1beta1"]
-            resources: ["*"]
-            verbs: ["*"]
-          # remove post 1.2
-          - apiGroups: ["gateway.solo.io.v2"]
-            resources: ["*"]
-            verbs: ["*"]
-          - apiGroups: ["extensions"]
-            resources: ["*"]
-            verbs: ["*"]
-          - apiGroups: ["extensions/v1beta1"]
-            resources: ["*"]
-            verbs: ["*"]
-        - type: ClusterRole
-          rulesType: CUSTOM
-          rules:
-          - apiGroups: [""]
-            resources: ["*"]
-            verbs: ["*"]
-          - apiGroups: ["apiextensions.k8s.io"]
-            resources: ["*"]
-            verbs: ["*"]
-          - apiGroups: ["rbac.authorization.k8s.io"]
-            resources: ["*"]
-            verbs: ["*"]
-          - apiGroups: ["apiextensions.k8s.io/v1beta1"]
-            resources: ["*"]
-            verbs: ["*"]
-          - apiGroups: ["admissionregistration.k8s.io"]
-            resources: ["*"]
-            verbs: ["*"]
-          - apiGroups: ["extensions/v1beta1"]
-            resources: ["*"]
-            verbs: ["*"]
+        # - type: Role               # This is a namespaced Role
+        #   rulesType: CUSTOM        # We specify our own custom RBAC rules
+        #   rules:
+        #   - apiGroups: ["app.k8s.io"]
+        #     resources: ["applications"]
+        #     verbs: ["*"]
+        #     # TODO: populate the rules lists from a separate file so it's easier to reuse and test rule specs
+        #     # for now, give access to everything
+        #   - apiGroups: [""]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["batch"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["apps"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["gloo.solo.io"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["gateway.solo.io"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["apiextensions.k8s.io/v1beta1"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   # remove post 1.2
+        #   - apiGroups: ["gateway.solo.io.v2"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["extensions"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["extensions/v1beta1"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["hello/test/only"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        # - type: ClusterRole
+        #   rulesType: CUSTOM
+        #   rules:
+        #   - apiGroups: [""]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["apiextensions.k8s.io"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["rbac.authorization.k8s.io"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["apiextensions.k8s.io/v1beta1"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["admissionregistration.k8s.io"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["extensions/v1beta1"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
+        #   - apiGroups: ["apps"]
+        #     resources: ["*"]
+        #     verbs: ["*"]
 
 required:
 - name
 - namespace
+- glooctlServiceAccount
