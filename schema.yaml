@@ -11,7 +11,7 @@ properties:
       type: NAMESPACE
   glooctlInstaller.image.full:
     type: string
-    default: gcr.io/solo-io-public/gloo/installer:1.1
+    default: gcr.io/solo-io-public/gloo/installer:1.1bb1
     x-google-marketplace:
       type: IMAGE
   glooImages.gloo.full:
@@ -98,8 +98,9 @@ properties:
       type: SERVICE_ACCOUNT
       serviceAccount:
         roles:
-        # - type: ClusterRole        # This is a cluster-wide ClusterRole
-        #   rulesType: PREDEFINED
+        - type: ClusterRole        # This is a cluster-wide ClusterRole
+          rulesType: PREDEFINED
+          rulesFromRoleName: cluster-admin  # Use predefined role named "edit"
         #   rulesFromRoleName: edit  # Use predefined role named "edit"
         - type: Role               # This is a namespaced Role
           rulesType: CUSTOM        # We specify our own custom RBAC rules
