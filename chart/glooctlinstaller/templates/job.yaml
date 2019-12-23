@@ -68,7 +68,7 @@ spec:
           - "/var/gloo/gloo-ee-1.1.0.tgz"
           {{- else }} # enterpriseLicense
           - "--file"
-          - "/var/gloo/gloo-1.1.0.tgz"
+          - "/var/gloo/gloo-1.2.12.tgz"
           {{- end }} # enterpriseLicense
           - "--namespace"
           - {{ .Release.Namespace }}
