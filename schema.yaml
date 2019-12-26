@@ -98,6 +98,9 @@ properties:
       type: SERVICE_ACCOUNT
       serviceAccount:
         roles:
+        - type: ClusterRole        # This is a cluster-wide ClusterRole
+          rulesType: PREDEFINED
+          rulesFromRoleName: cluster-admin  # Use predefined role named "edit"
         # - type: ClusterRole        # This is a cluster-wide ClusterRole
         #   rulesType: PREDEFINED
         #   rulesFromRoleName: edit  # Use predefined role named "edit"
