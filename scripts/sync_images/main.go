@@ -35,9 +35,9 @@ func getOptions() *Options {
 const (
 	MainDistributionRepoRoot = "quay.io/solo-io"
 	GlooSolutionName         = "gloo"
-	GlooSourceVersion        = "1.1.0"
+	GlooSourceVersion        = "1.2.12"
 	// will need to add another one of these when we add another version of the product to the GCP Marketplace
-	GlooDestinationVersion    = "1.1.0"
+	GlooDestinationVersion    = "1.2.12"
 	OrganizationRepoRoot      = "gcr.io/solo-io-public"
 	GlooImageName             = "gloo"
 	DiscoveryImageName        = "discovery"

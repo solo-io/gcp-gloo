@@ -3,7 +3,7 @@ REGISTRY := gcr.io/solo-io-public
 APP_NAME := gloo
 DEPLOYER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/deployer
 INSTALLER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/installer
-DEPLOYER_IMAGE_VERSION := 1.1
+DEPLOYER_IMAGE_VERSION := 1.2
 
 .PHONY: docker-push
 docker-push: docker-push-glooctl docker-push-deployer
@@ -39,3 +39,20 @@ test-install:
 .PHONY: docker-mirror
 docker-mirror:
 	go run scripts/sync_images/main.go
+
+
+.PHONY: cleanup-cluster.
+cleanup-cluster:
+	kubectl delete namespace $(TEST_NS)
+	kubectl delete clusterrolebinding gloo-resource-mutator-binding-$(TEST_NS)
+	kubectl delete clusterrolebinding gloo-resource-reader-binding-$(TEST_NS)
+	kubectl delete clusterrolebinding gloo-upstream-mutator-binding-$(TEST_NS)
+	kubectl delete clusterrolebinding settings-user-binding-$(TEST_NS)
+	kubectl delete clusterrolebinding gateway-resource-reader-binding-$(TEST_NS)
+	kubectl delete clusterrolebinding kube-resource-watcher-binding-$(TEST_NS)
+	kubectl delete clusterrole gateway-resource-reader-$(TEST_NS)
+	kubectl delete clusterrole gloo-resource-mutator-$(TEST_NS)
+	kubectl delete clusterrole gloo-resource-reader-$(TEST_NS)
+	kubectl delete clusterrole gloo-upstream-mutator-$(TEST_NS)
+	kubectl delete clusterrole kube-resource-watcher-$(TEST_NS)
+	kubectl delete clusterrole settings-user-$(TEST_NS)
