@@ -80,9 +80,45 @@ properties:
             registry: glooImages.accessLogger.registry
             repo: glooImages.accessLogger.repository
             tag: glooImages.accessLogger.tag
+## GLOOE Images
+  glooeImages.apiServerProxy.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/grpcserver-envoy:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.apiServerProxy.registry
+            repo: glooeImages.apiServerProxy.repository
+            tag: glooeImages.apiServerProxy.tag
+  glooeImages.apiServerBackend.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/grpcserver-ee:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.apiServerBackend.registry
+            repo: glooeImages.apiServerBackend.repository
+            tag: glooeImages.apiServerBackend.tag
+  glooeImages.apiServerFrontend.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/grpcserver-ui:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.apiServerFrontend.registry
+            repo: glooeImages.apiServerFrontend.repository
+            tag: glooeImages.apiServerFrontend.tag
 # accessible as: {{ .Values.enterpriseLicense }}
   enterpriseLicense:
     type: string
+    # set this for testing
+    # default: "temp"
     default: ""
     x-google-marketplace:
       type: STRING

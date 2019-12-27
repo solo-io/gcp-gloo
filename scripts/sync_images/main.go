@@ -36,8 +36,9 @@ const (
 	MainDistributionRepoRoot = "quay.io/solo-io"
 	GlooSolutionName         = "gloo"
 	GlooSourceVersion        = "1.2.12"
+	GlooESourceVersion       = "1.2.0"
 	// will need to add another one of these when we add another version of the product to the GCP Marketplace
-	GlooDestinationVersion    = "1.2.12"
+	//SolutionVersion           = "1.2.0"
 	OrganizationRepoRoot      = "gcr.io/solo-io-public"
 	GlooImageName             = "gloo"
 	DiscoveryImageName        = "discovery"
@@ -45,6 +46,10 @@ const (
 	CertgenImageName          = "certgen"
 	GlooEnvoyWrapperImageName = "gloo-envoy-wrapper"
 	AccessLoggerImageName     = "access-logger"
+	// GlooE
+	GlooeImagesApiServerProxyName    = "grpcserver-envoy"
+	GlooeImagesApiServerBackendName  = "grpcserver-ee"
+	GlooeImagesApiServerFrontendName = "grpcserver-ui"
 )
 
 type ImageToSync struct {
@@ -78,7 +83,7 @@ type SyncImageBatch struct {
 	Defaults *SyncImageDefaults
 }
 
-var imagesToSync = []*ImageToSync{{
+var glooImagesToSync = []*ImageToSync{{
 	ImageName: GlooImageName,
 	IsPrimary: true,
 }, {
@@ -93,15 +98,37 @@ var imagesToSync = []*ImageToSync{{
 	ImageName: AccessLoggerImageName,
 }}
 
-var syncImageBatch = SyncImageBatch{
-	Images: imagesToSync,
+var glooSyncImageBatch = SyncImageBatch{
+	Images: glooImagesToSync,
 	Defaults: &SyncImageDefaults{
 		DefaultSourceVersion: GlooSourceVersion,
 		DefaultSourceRepo:    MainDistributionRepoRoot,
-		DestinationVersion:   GlooDestinationVersion,
+		DestinationVersion:   GlooSourceVersion,
 		OrganizationRepoRoot: OrganizationRepoRoot,
 		SolutionName:         GlooSolutionName,
 	},
+}
+
+var glooEImagesToSync = []*ImageToSync{{
+	ImageName: GlooeImagesApiServerProxyName,
+}, {
+	ImageName: GlooeImagesApiServerBackendName,
+}, {
+	ImageName: GlooeImagesApiServerFrontendName,
+}}
+var glooESyncImageBatch = SyncImageBatch{
+	Images: glooEImagesToSync,
+	Defaults: &SyncImageDefaults{
+		DefaultSourceVersion: GlooESourceVersion,
+		DefaultSourceRepo:    MainDistributionRepoRoot,
+		DestinationVersion:   GlooESourceVersion,
+		OrganizationRepoRoot: OrganizationRepoRoot,
+		SolutionName:         GlooSolutionName,
+	},
+}
+var syncImageBatches = []SyncImageBatch{
+	glooSyncImageBatch,
+	glooESyncImageBatch,
 }
 
 // Only two arguments are really needed but this signature provides minor validation and keeps the function signature
@@ -123,13 +150,15 @@ func getSupportingImageDestinationRepo(destinationRepoRoot, solutionName, imageN
 }
 
 func run(opts *Options) error {
-	for _, img := range syncImageBatch.Images {
-		source := sourceSpecForImage(img, syncImageBatch.Defaults)
-		mirror := mirrorSpecForImage(img, syncImageBatch.Defaults)
-		fmt.Printf("mirroring from: %v\nto: %v\n", source, mirror)
-		if !opts.DryRun {
-			if err := createMirrorImage(source, mirror); err != nil {
-				return err
+	for _, syncImageBatch := range syncImageBatches {
+		for _, img := range syncImageBatch.Images {
+			source := sourceSpecForImage(img, syncImageBatch.Defaults)
+			mirror := mirrorSpecForImage(img, syncImageBatch.Defaults)
+			fmt.Printf("mirroring from: %v\nto: %v\n", source, mirror)
+			if !opts.DryRun {
+				if err := createMirrorImage(source, mirror); err != nil {
+					return err
+				}
 			}
 		}
 	}

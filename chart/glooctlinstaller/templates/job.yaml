@@ -43,6 +43,35 @@ data:
             repository: {{ .Values.glooImages.glooEnvoyWrapper.repository }}
             tag: {{ .Values.glooImages.glooEnvoyWrapper.tag }}
   "marketplace-enterprise.yaml": >-
+    apiServer:
+      deployment:
+        envoy:
+          image:
+            registry: {{ .Values.glooeImages.apiServerProxy.registry }}
+            repository: {{ .Values.glooeImages.apiServerProxy.repository }}
+            tag: {{ .Values.glooeImages.apiServerProxy.tag }}
+        server:
+          grpcPort: 10101
+          image:
+            pullPolicy: IfNotPresent
+            registry: {{ .Values.glooeImages.apiServerBackend.registry }}
+            repository: {{ .Values.glooeImages.apiServerBackend.repository }}
+            tag: {{ .Values.glooeImages.apiServerBackend.tag }}
+          oauth:
+            client: ""
+            server: ""
+        ui:
+          image:
+            pullPolicy: IfNotPresent
+            registry: {{ .Values.glooeImages.apiServerFrontend.registry }}
+            repository: {{ .Values.glooeImages.apiServerFrontend.repository }}
+            tag: {{ .Values.glooeImages.apiServerFrontend.tag }}
+          staticPort: 8080
+      enable: true
+      enableBeta: true
+      enterprise: true
+      service:
+        name: apiserver-ui
     gloo:
       gloo:
         deployment:
