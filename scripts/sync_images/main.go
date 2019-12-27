@@ -36,8 +36,9 @@ const (
 	MainDistributionRepoRoot = "quay.io/solo-io"
 	GlooSolutionName         = "gloo"
 	GlooSourceVersion        = "1.2.12"
+	GlooESourceVersion       = "1.2.0"
 	// will need to add another one of these when we add another version of the product to the GCP Marketplace
-	GlooDestinationVersion    = "1.2.12"
+	//SolutionVersion           = "1.2.0"
 	OrganizationRepoRoot      = "gcr.io/solo-io-public"
 	GlooImageName             = "gloo"
 	DiscoveryImageName        = "discovery"
@@ -45,7 +46,16 @@ const (
 	CertgenImageName          = "certgen"
 	GlooEnvoyWrapperImageName = "gloo-envoy-wrapper"
 	AccessLoggerImageName     = "access-logger"
+	// GlooE
+	GlooeImagesApiServerProxyName    = "grpcserver-envoy"
+	GlooeImagesApiServerBackendName  = "grpcserver-ee"
+	GlooeImagesApiServerFrontendName = "grpcserver-ui"
+	GlooeImagesExtAuth               = "extauth-ee"
+	GlooeImagesObservability         = "observability-ee"
+	GlooeImagesRateLimit             = "rate-limit-ee"
 )
+
+//GlooeImagesKubeStateMetrics      = "kube-state-metrics"
 
 type ImageToSync struct {
 	// what to call the image, relative to its position in the repo
@@ -78,7 +88,7 @@ type SyncImageBatch struct {
 	Defaults *SyncImageDefaults
 }
 
-var imagesToSync = []*ImageToSync{{
+var glooImagesToSync = []*ImageToSync{{
 	ImageName: GlooImageName,
 	IsPrimary: true,
 }, {
@@ -93,15 +103,70 @@ var imagesToSync = []*ImageToSync{{
 	ImageName: AccessLoggerImageName,
 }}
 
-var syncImageBatch = SyncImageBatch{
-	Images: imagesToSync,
+var glooSyncImageBatch = SyncImageBatch{
+	Images: glooImagesToSync,
 	Defaults: &SyncImageDefaults{
 		DefaultSourceVersion: GlooSourceVersion,
 		DefaultSourceRepo:    MainDistributionRepoRoot,
-		DestinationVersion:   GlooDestinationVersion,
+		DestinationVersion:   GlooSourceVersion,
 		OrganizationRepoRoot: OrganizationRepoRoot,
 		SolutionName:         GlooSolutionName,
 	},
+}
+
+var glooEImagesToSync = []*ImageToSync{{
+	ImageName: GlooeImagesApiServerProxyName,
+}, {
+	ImageName: GlooeImagesApiServerBackendName,
+}, {
+	ImageName: GlooeImagesApiServerFrontendName,
+}, {
+	ImageName: GlooeImagesExtAuth,
+}, {
+	ImageName: GlooeImagesObservability,
+}, {
+	ImageName: GlooeImagesRateLimit,
+},
+	// third party images
+	{
+		ImageName:      "kube-state-metrics",
+		SourceVersion:  "v1.6.0",
+		SourceRepoRoot: "quay.io/coreos",
+	}, {
+		ImageName:      "grafana",
+		SourceVersion:  "6.4.2",
+		SourceRepoRoot: "docker.io/grafana",
+	}, {
+		ImageName:      "busybox",
+		SourceVersion:  "1.30",
+		SourceRepoRoot: "docker.io",
+	}, {
+		ImageName:      "redis",
+		SourceVersion:  "5",
+		SourceRepoRoot: "docker.io",
+	}, {
+		ImageName:      "prometheus",
+		SourceVersion:  "v2.13.1",
+		SourceRepoRoot: "docker.io/prom",
+	}, {
+		ImageName:      "configmap-reload",
+		SourceVersion:  "v0.2.2",
+		SourceRepoRoot: "docker.io/jimmidyson",
+	}}
+var glooESyncImageBatch = SyncImageBatch{
+	Images: glooEImagesToSync,
+	Defaults: &SyncImageDefaults{
+		DefaultSourceVersion: GlooESourceVersion,
+		DefaultSourceRepo:    MainDistributionRepoRoot,
+		DestinationVersion:   GlooESourceVersion,
+		OrganizationRepoRoot: OrganizationRepoRoot,
+		SolutionName:         GlooSolutionName,
+	},
+}
+
+var syncImageBatches = []SyncImageBatch{
+	glooSyncImageBatch,
+	glooESyncImageBatch,
 }
 
 // Only two arguments are really needed but this signature provides minor validation and keeps the function signature
@@ -123,13 +188,15 @@ func getSupportingImageDestinationRepo(destinationRepoRoot, solutionName, imageN
 }
 
 func run(opts *Options) error {
-	for _, img := range syncImageBatch.Images {
-		source := sourceSpecForImage(img, syncImageBatch.Defaults)
-		mirror := mirrorSpecForImage(img, syncImageBatch.Defaults)
-		fmt.Printf("mirroring from: %v\nto: %v\n", source, mirror)
-		if !opts.DryRun {
-			if err := createMirrorImage(source, mirror); err != nil {
-				return err
+	for _, syncImageBatch := range syncImageBatches {
+		for _, img := range syncImageBatch.Images {
+			source := sourceSpecForImage(img, syncImageBatch.Defaults)
+			mirror := mirrorSpecForImage(img, syncImageBatch.Defaults)
+			fmt.Printf("mirroring from: %v\nto: %v\n", source, mirror)
+			if !opts.DryRun {
+				if err := createMirrorImage(source, mirror); err != nil {
+					return err
+				}
 			}
 		}
 	}

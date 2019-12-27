@@ -80,10 +80,90 @@ properties:
             registry: glooImages.accessLogger.registry
             repo: glooImages.accessLogger.repository
             tag: glooImages.accessLogger.tag
+## GLOOE Images
+  glooeImages.apiServerProxy.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/grpcserver-envoy:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.apiServerProxy.registry
+            repo: glooeImages.apiServerProxy.repository
+            tag: glooeImages.apiServerProxy.tag
+  glooeImages.apiServerBackend.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/grpcserver-ee:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.apiServerBackend.registry
+            repo: glooeImages.apiServerBackend.repository
+            tag: glooeImages.apiServerBackend.tag
+  glooeImages.apiServerFrontend.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/grpcserver-ui:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.apiServerFrontend.registry
+            repo: glooeImages.apiServerFrontend.repository
+            tag: glooeImages.apiServerFrontend.tag
+  glooeImages.apiRateLimit.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/rate-limit-ee:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.rateLimit.registry
+            repo: glooeImages.rateLimit.repository
+            tag: glooeImages.rateLimit.tag
+  glooeImages.redis.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/redis:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.redis.registry
+            repo: glooeImages.redis.repository
+            tag: glooeImages.redis.tag
+  glooeImages.observability.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/observability-ee:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.observability.registry
+            repo: glooeImages.observability.repository
+            tag: glooeImages.observability.tag
+  glooeImages.extAuth.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/extauth-ee:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.extAuth.registry
+            repo: glooeImages.extAuth.repository
+            tag: glooeImages.extAuth.tag
 # accessible as: {{ .Values.enterpriseLicense }}
   enterpriseLicense:
     type: string
-    default: ""
+    # set this for testing
+    default: "temp"
+    # default: ""
     x-google-marketplace:
       type: STRING
       string:

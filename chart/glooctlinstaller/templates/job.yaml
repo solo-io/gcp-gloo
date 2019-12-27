@@ -42,6 +42,150 @@ data:
             registry: {{ .Values.glooImages.glooEnvoyWrapper.registry }}
             repository: {{ .Values.glooImages.glooEnvoyWrapper.repository }}
             tag: {{ .Values.glooImages.glooEnvoyWrapper.tag }}
+  "marketplace-enterprise.yaml": >-
+    global:
+      image:
+        registry: gcr.io/solo-io-public
+        pullPolicy: IfNotPresent
+        pullSecret: solo-io-readerbot-pull-secret
+      glooRbac:
+        create: true
+      extensions:
+        extAuth:
+          enabled: true
+          standaloneDeployment: true
+          envoySidecar: false
+          serviceName: ext-auth
+          userIdHeader: x-user-id
+          deployment:
+            stats: true
+            name: "extauth"
+            image:
+              registry: {{ .Values.glooeImages.extAuth.registry }}
+              repository: {{ .Values.glooeImages.extAuth.repository }}
+              tag: {{ .Values.glooeImages.extAuth.tag }}
+            port: 8083
+          service:
+            port: 8083
+            name: extauth
+          signingKey:
+            name: extauth-signing-key
+            signing-key: ""
+    apiServer:
+      deployment:
+        envoy:
+          image:
+            registry: {{ .Values.glooeImages.apiServerProxy.registry }}
+            repository: {{ .Values.glooeImages.apiServerProxy.repository }}
+            tag: {{ .Values.glooeImages.apiServerProxy.tag }}
+        server:
+          grpcPort: 10101
+          image:
+            pullPolicy: IfNotPresent
+            registry: {{ .Values.glooeImages.apiServerBackend.registry }}
+            repository: {{ .Values.glooeImages.apiServerBackend.repository }}
+            tag: {{ .Values.glooeImages.apiServerBackend.tag }}
+          oauth:
+            client: ""
+            server: ""
+        ui:
+          image:
+            pullPolicy: IfNotPresent
+            registry: {{ .Values.glooeImages.apiServerFrontend.registry }}
+            repository: {{ .Values.glooeImages.apiServerFrontend.repository }}
+            tag: {{ .Values.glooeImages.apiServerFrontend.tag }}
+          staticPort: 8080
+      enable: true
+      enableBeta: true
+      enterprise: true
+      service:
+        name: apiserver-ui
+    rateLimit:
+      # setting to false will disable rate limiting
+      enabled: true
+      deployment:
+        stats: true
+        name: "rate-limit"
+        image:
+          registry: {{ .Values.glooeImages.rateLimit.registry }}
+          repository: {{ .Values.glooeImages.rateLimit.repository }}
+          tag: {{ .Values.glooeImages.rateLimit.tag }}
+        glooAddress: gloo:9977
+        redisUrl: redis:6379
+        dynamodb:
+          region: us-east-2
+          tableName: rate-limits
+          consistentReads: true
+          batchSize: 100
+      service:
+        port: 18081
+        name: rate-limit
+    redis:
+      deployment:
+        name: redis
+        image:
+          registry: {{ .Values.glooeImages.redis.registry }}
+          repository: {{ .Values.glooeImages.redis.repository }}
+          tag: {{ .Values.glooeImages.redis.tag }}
+        staticPort: 6379
+      service:
+        port: 6379
+        name: redis
+    observability:
+      # TODO enable
+      enabled: false
+      # deployment:
+      #   stats: true
+      #   name: observability
+      #   image:
+      #     registry: {{ .Values.glooeImages.observability.registry }}
+      #     repository: {{ .Values.glooeImages.observability.repository }}
+      #     tag: {{ .Values.glooeImages.observability.tag }}
+      # customGrafana:
+      #   enabled: false
+    prometheus:
+      # TODO enable
+      enabled: false
+    grafana:
+      # TODO enable
+      enabled: false
+    gloo:
+      gloo:
+        deployment:
+          image:
+            registry: {{ .Values.glooImages.gloo.registry }}
+            repository: {{ .Values.glooImages.gloo.repository }}
+            tag: {{ .Values.glooImages.gloo.tag }}
+      discovery:
+        deployment:
+          image:
+            registry: {{ .Values.glooImages.discovery.registry }}
+            repository: {{ .Values.glooImages.discovery.repository }}
+            tag: {{ .Values.glooImages.discovery.tag }}
+      gateway:
+        deployment:
+          image:
+            registry: {{ .Values.glooImages.gateway.registry }}
+            repository: {{ .Values.glooImages.gateway.repository }}
+            tag: {{ .Values.glooImages.gateway.tag }}
+        certGenJob:
+          image:
+            registry: {{ .Values.glooImages.certgen.registry }}
+            repository: {{ .Values.glooImages.certgen.repository }}
+            tag: {{ .Values.glooImages.certgen.tag }}
+      accessLogger:
+        deployment:
+          image:
+            registry: {{ .Values.glooImages.accessLogger.registry }}
+            repository: {{ .Values.glooImages.accessLogger.repository }}
+            tag: {{ .Values.glooImages.accessLogger.tag }}
+      gatewayProxies:
+        gatewayProxy:
+          podTemplate:
+            image:
+              registry: {{ .Values.glooImages.glooEnvoyWrapper.registry }}
+              repository: {{ .Values.glooImages.glooEnvoyWrapper.repository }}
+              tag: {{ .Values.glooImages.glooEnvoyWrapper.tag }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -65,15 +209,17 @@ spec:
           - "--license-key"
           - {{ .Values.enterpriseLicense }}
           - "--file"
-          - "/var/gloo/gloo-ee-1.1.0.tgz"
+          - "/var/gloo/gloo-ee-1.2.0.tgz"
+          - "--values"
+          - /var/gloo/install-values/marketplace-enterprise.yaml
           {{- else }} # enterpriseLicense
           - "--file"
           - "/var/gloo/gloo-1.2.12.tgz"
+          - "--values"
+          - /var/gloo/install-values/marketplace.yaml
           {{- end }} # enterpriseLicense
           - "--namespace"
           - {{ .Release.Namespace }}
-          - "--values"
-          - /var/gloo/install-values/marketplace.yaml
         volumeMounts:
           - name: values-volume
             mountPath: /var/gloo/install-values
@@ -90,6 +236,19 @@ spec:
             value: gloo
         command: 
           - "setOwner"
+      # grafana is a subchart so it does not have the "gloo" label
+      - name: glooctl-installer-own-grafana
+        image: {{ .Values.glooctlInstaller.image.full }}
+        imagePullPolicy: Always
+        env:
+          - name: APP_NAME
+            value: {{ .Release.Name }}
+          - name: NAMESPACE
+            value: {{ .Release.Namespace }}
+          - name: TARGET_SELECTOR
+            value: app=glooe-grafana
+        command:
+          - "setOwner"
       volumes:
         - name: values-volume
           configMap:
@@ -97,6 +256,8 @@ spec:
             items:
             - key: "marketplace.yaml"
               path: "marketplace.yaml"
+            - key: "marketplace-enterprise.yaml"
+              path: "marketplace-enterprise.yaml"
       restartPolicy: Never
   backoffLimit: 4
 {{- end }} # marketplaceResources
