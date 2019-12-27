@@ -236,6 +236,19 @@ spec:
             value: gloo
         command: 
           - "setOwner"
+      # grafana is a subchart so it does not have the "gloo" label
+      - name: glooctl-installer-own-grafana
+        image: {{ .Values.glooctlInstaller.image.full }}
+        imagePullPolicy: Always
+        env:
+          - name: APP_NAME
+            value: {{ .Release.Name }}
+          - name: NAMESPACE
+            value: {{ .Release.Namespace }}
+          - name: TARGET_SELECTOR
+            value: app=glooe-grafana
+        command:
+          - "setOwner"
       volumes:
         - name: values-volume
           configMap:
