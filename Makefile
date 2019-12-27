@@ -56,3 +56,16 @@ cleanup-cluster:
 	kubectl delete clusterrole gloo-upstream-mutator-$(TEST_NS)
 	kubectl delete clusterrole kube-resource-watcher-$(TEST_NS)
 	kubectl delete clusterrole settings-user-$(TEST_NS)
+	kubectl delete clusterrole apiserver-ui-$(TEST_NS)
+	kubectl delete clusterrole gloo-glooe-prometheus-alertmanager
+	kubectl delete clusterrole gloo-glooe-prometheus-pushgateway
+	kubectl delete clusterrole glooe-prometheus-kube-state-metrics
+	kubectl delete clusterrole glooe-prometheus-server
+	kubectl delete clusterrole observability-upstream-role-$(TEST_NS)
+	kubectl delete clusterrolebinding apiserver-ui-role-binding-$(TEST_NS)
+	kubectl delete clusterrolebinding gloo-glooe-prometheus-alertmanager
+	kubectl delete clusterrolebinding gloo-glooe-prometheus-pushgateway
+	kubectl delete clusterrolebinding glooe-prometheus-kube-state-metrics
+	kubectl delete clusterrolebinding glooe-prometheus-server
+	kubectl delete clusterrolebinding glooe-settings-user-role-binding-$(TEST_NS)
+	kubectl delete clusterrolebinding observability-upstream-rolebinding-$(TEST_NS)

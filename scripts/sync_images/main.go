@@ -50,7 +50,12 @@ const (
 	GlooeImagesApiServerProxyName    = "grpcserver-envoy"
 	GlooeImagesApiServerBackendName  = "grpcserver-ee"
 	GlooeImagesApiServerFrontendName = "grpcserver-ui"
+	GlooeImagesExtAuth               = "extauth-ee"
+	GlooeImagesObservability         = "observability-ee"
+	GlooeImagesRateLimit             = "rate-limit-ee"
 )
+
+//GlooeImagesKubeStateMetrics      = "kube-state-metrics"
 
 type ImageToSync struct {
 	// what to call the image, relative to its position in the repo
@@ -115,6 +120,12 @@ var glooEImagesToSync = []*ImageToSync{{
 	ImageName: GlooeImagesApiServerBackendName,
 }, {
 	ImageName: GlooeImagesApiServerFrontendName,
+}, {
+	ImageName: GlooeImagesExtAuth,
+}, {
+	ImageName: GlooeImagesObservability,
+}, {
+	ImageName: GlooeImagesRateLimit,
 }}
 var glooESyncImageBatch = SyncImageBatch{
 	Images: glooEImagesToSync,

@@ -43,6 +43,34 @@ data:
             repository: {{ .Values.glooImages.glooEnvoyWrapper.repository }}
             tag: {{ .Values.glooImages.glooEnvoyWrapper.tag }}
   "marketplace-enterprise.yaml": >-
+    global:
+      image:
+        registry: gcr.io/solo-io-public
+        pullPolicy: IfNotPresent
+        pullSecret: solo-io-readerbot-pull-secret
+      glooRbac:
+        create: true
+      extensions:
+        extAuth:
+          enabled: true
+          standaloneDeployment: true
+          envoySidecar: false
+          serviceName: ext-auth
+          userIdHeader: x-user-id
+          deployment:
+            stats: true
+            name: "extauth"
+            image:
+              registry: {{ .Values.glooeImages.extAuth.registry }}
+              repository: {{ .Values.glooeImages.extAuth.repository }}
+              tag: {{ .Values.glooeImages.extAuth.tag }}
+            port: 8083
+          service:
+            port: 8083
+            name: extauth
+          signingKey:
+            name: extauth-signing-key
+            signing-key: ""
     apiServer:
       deployment:
         envoy:
@@ -72,6 +100,37 @@ data:
       enterprise: true
       service:
         name: apiserver-ui
+    rateLimit:
+      # setting to false will disable rate limiting
+      enabled: true
+      deployment:
+        stats: true
+        name: "rate-limit"
+        image:
+          registry: {{ .Values.glooeImages.rateLimit.registry }}
+          repository: {{ .Values.glooeImages.rateLimit.repository }}
+          tag: {{ .Values.glooeImages.rateLimit.tag }}
+        glooAddress: gloo:9977
+        redisUrl: redis:6379
+        dynamodb:
+          region: us-east-2
+          tableName: rate-limits
+          consistentReads: true
+          batchSize: 100
+      service:
+        port: 18081
+        name: rate-limit
+    observability:
+      enabled: true
+      deployment:
+        stats: true
+        name: observability
+        image:
+          registry: {{ .Values.glooeImages.observability.registry }}
+          repository: {{ .Values.glooeImages.observability.repository }}
+          tag: {{ .Values.glooeImages.observability.tag }}
+      customGrafana:
+        enabled: false
     gloo:
       gloo:
         deployment:

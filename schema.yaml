@@ -114,12 +114,45 @@ properties:
             registry: glooeImages.apiServerFrontend.registry
             repo: glooeImages.apiServerFrontend.repository
             tag: glooeImages.apiServerFrontend.tag
+  glooeImages.apiRateLimit.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/rate-limit-ee:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.rateLimit.registry
+            repo: glooeImages.rateLimit.repository
+            tag: glooeImages.rateLimit.tag
+  glooeImages.observability.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/observability-ee:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.observability.registry
+            repo: glooeImages.observability.repository
+            tag: glooeImages.observability.tag
+  glooeImages.extAuth.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/extauth-ee:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.extAuth.registry
+            repo: glooeImages.extAuth.repository
+            tag: glooeImages.extAuth.tag
 # accessible as: {{ .Values.enterpriseLicense }}
   enterpriseLicense:
     type: string
     # set this for testing
-    # default: "temp"
-    default: ""
+    default: "temp"
+    # default: ""
     x-google-marketplace:
       type: STRING
       string:
