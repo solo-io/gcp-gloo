@@ -162,8 +162,8 @@ properties:
   enterpriseLicense:
     type: string
     # set this for testing
-    default: "temp"
-    # default: ""
+    # default: "temp"
+    default: ""
     x-google-marketplace:
       type: STRING
       string:
