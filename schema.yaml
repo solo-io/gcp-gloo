@@ -125,6 +125,17 @@ properties:
             registry: glooeImages.rateLimit.registry
             repo: glooeImages.rateLimit.repository
             tag: glooeImages.rateLimit.tag
+  glooeImages.redis.full:
+    type: string
+    default: gcr.io/solo-io-public/gloo/redis:1.2.0
+    x-google-marketplace:
+      type: IMAGE
+      image:
+        generatedProperties:
+          splitToRegistryRepoTag:
+            registry: glooeImages.redis.registry
+            repo: glooeImages.redis.repository
+            tag: glooeImages.redis.tag
   glooeImages.observability.full:
     type: string
     default: gcr.io/solo-io-public/gloo/observability-ee:1.2.0

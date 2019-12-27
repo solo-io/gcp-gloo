@@ -120,17 +120,35 @@ data:
       service:
         port: 18081
         name: rate-limit
-    observability:
-      enabled: true
+    redis:
       deployment:
-        stats: true
-        name: observability
+        name: redis
         image:
-          registry: {{ .Values.glooeImages.observability.registry }}
-          repository: {{ .Values.glooeImages.observability.repository }}
-          tag: {{ .Values.glooeImages.observability.tag }}
-      customGrafana:
-        enabled: false
+          registry: {{ .Values.glooeImages.redis.registry }}
+          repository: {{ .Values.glooeImages.redis.repository }}
+          tag: {{ .Values.glooeImages.redis.tag }}
+        staticPort: 6379
+      service:
+        port: 6379
+        name: redis
+    observability:
+      # TODO enable
+      enabled: false
+      # deployment:
+      #   stats: true
+      #   name: observability
+      #   image:
+      #     registry: {{ .Values.glooeImages.observability.registry }}
+      #     repository: {{ .Values.glooeImages.observability.repository }}
+      #     tag: {{ .Values.glooeImages.observability.tag }}
+      # customGrafana:
+      #   enabled: false
+    prometheus:
+      # TODO enable
+      enabled: false
+    grafana:
+      # TODO enable
+      enabled: false
     gloo:
       gloo:
         deployment:

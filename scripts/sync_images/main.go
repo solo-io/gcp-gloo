@@ -126,7 +126,33 @@ var glooEImagesToSync = []*ImageToSync{{
 	ImageName: GlooeImagesObservability,
 }, {
 	ImageName: GlooeImagesRateLimit,
-}}
+},
+	// third party images
+	{
+		ImageName:      "kube-state-metrics",
+		SourceVersion:  "v1.6.0",
+		SourceRepoRoot: "quay.io/coreos",
+	}, {
+		ImageName:      "grafana",
+		SourceVersion:  "6.4.2",
+		SourceRepoRoot: "docker.io/grafana",
+	}, {
+		ImageName:      "busybox",
+		SourceVersion:  "1.30",
+		SourceRepoRoot: "docker.io",
+	}, {
+		ImageName:      "redis",
+		SourceVersion:  "5",
+		SourceRepoRoot: "docker.io",
+	}, {
+		ImageName:      "prometheus",
+		SourceVersion:  "v2.13.1",
+		SourceRepoRoot: "docker.io/prom",
+	}, {
+		ImageName:      "configmap-reload",
+		SourceVersion:  "v0.2.2",
+		SourceRepoRoot: "docker.io/jimmidyson",
+	}}
 var glooESyncImageBatch = SyncImageBatch{
 	Images: glooEImagesToSync,
 	Defaults: &SyncImageDefaults{
@@ -137,6 +163,7 @@ var glooESyncImageBatch = SyncImageBatch{
 		SolutionName:         GlooSolutionName,
 	},
 }
+
 var syncImageBatches = []SyncImageBatch{
 	glooSyncImageBatch,
 	glooESyncImageBatch,
