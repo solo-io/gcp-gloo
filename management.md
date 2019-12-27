@@ -6,6 +6,11 @@
 
 summary: publish a new deployer image that references the correct values
 
+- Update the versions of gloo and glooe that are listed in `scripts/sync_images/main.go`
+- Run the mirror script to host these versions of the images in the GCR repo: `make docker-mirror`
+- Run `make mpdev-verify` to confirm that the new images deploy correctly.
+  - Verification requires that all resources are installed and deleted.
+  - Currently, successful runs take 2-3 minutes. Failing runs time out after about 5 minutes.
 
 # Notes
 

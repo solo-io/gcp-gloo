@@ -38,7 +38,7 @@ const (
 	GlooSourceVersion        = "1.2.12"
 	GlooESourceVersion       = "1.2.0"
 	// will need to add another one of these when we add another version of the product to the GCP Marketplace
-	//SolutionVersion           = "1.2.0"
+	SolutionVersion           = "1.2"
 	OrganizationRepoRoot      = "gcr.io/solo-io-public"
 	GlooImageName             = "gloo"
 	DiscoveryImageName        = "discovery"
@@ -108,7 +108,7 @@ var glooSyncImageBatch = SyncImageBatch{
 	Defaults: &SyncImageDefaults{
 		DefaultSourceVersion: GlooSourceVersion,
 		DefaultSourceRepo:    MainDistributionRepoRoot,
-		DestinationVersion:   GlooSourceVersion,
+		DestinationVersion:   SolutionVersion,
 		OrganizationRepoRoot: OrganizationRepoRoot,
 		SolutionName:         GlooSolutionName,
 	},
@@ -158,7 +158,7 @@ var glooESyncImageBatch = SyncImageBatch{
 	Defaults: &SyncImageDefaults{
 		DefaultSourceVersion: GlooESourceVersion,
 		DefaultSourceRepo:    MainDistributionRepoRoot,
-		DestinationVersion:   GlooESourceVersion,
+		DestinationVersion:   SolutionVersion,
 		OrganizationRepoRoot: OrganizationRepoRoot,
 		SolutionName:         GlooSolutionName,
 	},

@@ -69,3 +69,7 @@ cleanup-cluster:
 	kubectl delete clusterrolebinding glooe-prometheus-server
 	kubectl delete clusterrolebinding glooe-settings-user-role-binding-$(TEST_NS)
 	kubectl delete clusterrolebinding observability-upstream-rolebinding-$(TEST_NS)
+
+.PHONY: mpdev-verify
+mpdev-verify:
+	mpdev /scripts/verify   --deployer=gcr.io/solo-io-public/gloo/deployer:$(DEPLOYER_IMAGE_VERSION)
