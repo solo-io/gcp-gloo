@@ -105,12 +105,12 @@ spec:
           - "--file"
           - "/var/gloo/gloo-ee-1.2.0.tgz"
           - "--values"
-          - /var/gloo/install-values/marketplace.yaml
+          - /var/gloo/install-values/marketplace-enterprise.yaml
           {{- else }} # enterpriseLicense
           - "--file"
           - "/var/gloo/gloo-1.2.12.tgz"
           - "--values"
-          - /var/gloo/install-values/marketplace-enterprise.yaml
+          - /var/gloo/install-values/marketplace.yaml
           {{- end }} # enterpriseLicense
           - "--namespace"
           - {{ .Release.Namespace }}
