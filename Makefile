@@ -72,4 +72,4 @@ cleanup-cluster:
 
 .PHONY: mpdev-verify
 mpdev-verify:
-	mpdev /scripts/verify   --deployer=gcr.io/solo-io-public/gloo/deployer:$(DEPLOYER_IMAGE_VERSION)
+		mpdev /scripts/verify   --deployer=gcr.io/solo-io-public/gloo/deployer:$(DEPLOYER_IMAGE_VERSION)
