@@ -209,12 +209,12 @@ spec:
           - "--license-key"
           - {{ .Values.enterpriseLicense }}
           - "--file"
-          - "/var/gloo/gloo-ee-1.2.0.tgz"
+          - "/var/gloo/gloo-ee-1.3.2.tgz"
           - "--values"
           - /var/gloo/install-values/marketplace-enterprise.yaml
           {{- else }} # enterpriseLicense
           - "--file"
-          - "/var/gloo/gloo-1.2.12.tgz"
+          - "/var/gloo/gloo-1.3,21.tgz"
           - "--values"
           - /var/gloo/install-values/marketplace.yaml
           {{- end }} # enterpriseLicense

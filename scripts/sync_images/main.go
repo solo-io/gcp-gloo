@@ -35,10 +35,10 @@ func getOptions() *Options {
 const (
 	MainDistributionRepoRoot = "quay.io/solo-io"
 	GlooSolutionName         = "gloo"
-	GlooSourceVersion        = "1.2.12"
-	GlooESourceVersion       = "1.2.0"
+	GlooSourceVersion        = "1.3.21"
+	GlooESourceVersion       = "1.3.2"
 	// will need to add another one of these when we add another version of the product to the GCP Marketplace
-	SolutionVersion           = "1.2"
+	SolutionVersion           = "1.3"
 	OrganizationRepoRoot      = "gcr.io/solo-io-public"
 	GlooImageName             = "gloo"
 	DiscoveryImageName        = "discovery"
@@ -134,11 +134,11 @@ var glooEImagesToSync = []*ImageToSync{{
 		SourceRepoRoot: "quay.io/coreos",
 	}, {
 		ImageName:      "grafana",
-		SourceVersion:  "6.4.2",
+		SourceVersion:  "6.6.2",
 		SourceRepoRoot: "docker.io/grafana",
 	}, {
 		ImageName:      "busybox",
-		SourceVersion:  "1.30",
+		SourceVersion:  "1.31.1",
 		SourceRepoRoot: "docker.io",
 	}, {
 		ImageName:      "redis",

@@ -3,7 +3,7 @@ REGISTRY := gcr.io/solo-io-public
 APP_NAME := gloo
 DEPLOYER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/deployer
 INSTALLER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/installer
-DEPLOYER_IMAGE_VERSION := 1.2
+DEPLOYER_IMAGE_VERSION := 1.3
 
 .PHONY: docker-push
 docker-push: docker-push-glooctl docker-push-deployer

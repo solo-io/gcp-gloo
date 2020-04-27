@@ -21,6 +21,6 @@ glooctlInstaller:
   #  an elaborate template function to allow other hosts
   image:
     # set by marketplace
-    # full: gcr.io/solo-io-public/gloo/installer:1.2
+    # full: gcr.io/solo-io-public/gloo/installer:1.3
     pullPolicy: Always
 
