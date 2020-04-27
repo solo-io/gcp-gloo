@@ -214,7 +214,7 @@ spec:
           - /var/gloo/install-values/marketplace-enterprise.yaml
           {{- else }} # enterpriseLicense
           - "--file"
-          - "/var/gloo/gloo-1.3,21.tgz"
+          - "/var/gloo/gloo-1.3.21.tgz"
           - "--values"
           - /var/gloo/install-values/marketplace.yaml
           {{- end }} # enterpriseLicense
