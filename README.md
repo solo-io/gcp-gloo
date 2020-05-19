@@ -32,4 +32,6 @@ This repo manages two images and a helm chart for running glooctl
 
 # Management
 
-See [repo management doc](./management.md) for notes on how to keep this repo and the GCP Marketplace listing syncronized with Gloo.
+When making changes to resources in the helm chart:
+- Run `make docker-push` 
+- Run `make mpdev-verify`
