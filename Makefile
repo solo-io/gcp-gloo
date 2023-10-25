@@ -3,7 +3,7 @@ REGISTRY := gcr.io/solo-io-public
 APP_NAME := gloo
 DEPLOYER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/deployer
 INSTALLER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/installer
-DEPLOYER_IMAGE_VERSION := 1.4-beta1
+DEPLOYER_IMAGE_VERSION := 1.4.0
 
 # The following are the versions of the images that will be used in the marketplace
 GLOO_VERSION := 1.15.14
@@ -39,6 +39,11 @@ docker-push-deployer:
 .PHONY: docker-push-installer
 docker-push-installer:
 	docker push $(INSTALLER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION)
+
+# Used to publish new versions
+.PHONY: publish
+publish: docker-build
+publish: docker-push
 
 .PHONY: mpdev-doctor
 mpdev-doctor:

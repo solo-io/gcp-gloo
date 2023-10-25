@@ -11,7 +11,7 @@ properties:
       type: NAMESPACE
   glooctlInstaller.image.full:
     type: string
-    default: gcr.io/solo-io-public/gloo/installer:1.4-beta1
+    default: gcr.io/solo-io-public/gloo/installer:1.4.0
     x-google-marketplace:
       type: IMAGE
 # accessible as: {{ .Values.enterpriseLicense }}
