@@ -1,7 +1,6 @@
 FROM alpine
 
 ARG GLOO_VERSION
-ARG GLOOE_VERSION
 ARG KUBE_MINOR_VERSION=1.27
 ARG KUBE_PATCH_VERSION=0
 
@@ -14,10 +13,6 @@ RUN glooctl version
 RUN mkdir /var/gloo/
 RUN wget https://storage.googleapis.com/solo-public-helm/charts/gloo-$GLOO_VERSION.tgz
 RUN mv gloo-$GLOO_VERSION.tgz /var/gloo/gloo.tgz
-
-# NOTE: rectify versions when v1.2 is available
-RUN wget https://storage.googleapis.com/gloo-ee-helm/charts/gloo-ee-$GLOOE_VERSION.tgz
-RUN mv gloo-ee-$GLOOE_VERSION.tgz /var/gloo/gloo-ee.tgz
 
 
 RUN mkdir -p /opt/kubectl/$KUBE_MINOR_VERSION \

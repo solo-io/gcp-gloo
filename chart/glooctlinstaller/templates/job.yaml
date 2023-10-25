@@ -37,49 +37,6 @@ data:
     gatewayProxies:
       gatewayProxy:
         disabled: true
-  "marketplace-enterprise.yaml": >-
-    global:
-      image:
-        registry: gcr.io/gloo-edge
-        pullPolicy: IfNotPresent
-        extended: false
-      glooRbac:
-        namespaced: true
-    settings:
-      singleNamespace: true
-      create: true
-    gloo:
-      gloo:
-        logLevel: info
-        disableLeaderElection: true
-        deployment:
-          replicas: 1
-      gateway:
-        certGenJob:
-          enabled: false
-        cleanupJob:
-          enabled: false
-        rolloutJob:
-          enabled: false
-        validation:
-          enabled: false
-          webhook:
-            enabled: false
-      discovery:
-        enabled: false
-      gatewayProxies:
-        gatewayProxy:
-          disabled: true
-    prometheus:
-      podSecurityPolicy:
-        enabled: true
-    grafana:
-      testFramework:
-        enabled: false
-    gloo-fed:
-      enabled: false
-      glooFedApiserver:
-        enable: false
 ---
 apiVersion: batch/v1
 kind: Job
@@ -98,20 +55,10 @@ spec:
           - "glooctl"
           - "install"
           - "gateway"
-          {{- if .Values.enterpriseLicense }}
-          - "enterprise"
-          - "--license-key"
-          - {{ .Values.enterpriseLicense }}
-          - "--file"
-          - "/var/gloo/gloo-ee.tgz"
-          - "--values"
-          - /var/gloo/install-values/marketplace-enterprise.yaml
-          {{- else }} # enterpriseLicense
           - "--file"
           - "/var/gloo/gloo.tgz"
           - "--values"
           - /var/gloo/install-values/marketplace.yaml
-          {{- end }} # enterpriseLicense
           - "--namespace"
           - {{ .Release.Namespace }}
         volumeMounts:
@@ -130,19 +77,6 @@ spec:
             value: gloo
         command: 
           - "setOwner"
-      # grafana is a subchart so it does not have the "gloo" label
-      - name: glooctl-installer-own-grafana
-        image: {{ .Values.glooctlInstaller.image.full }}
-        imagePullPolicy: Always
-        env:
-          - name: APP_NAME
-            value: {{ .Release.Name }}
-          - name: NAMESPACE
-            value: {{ .Release.Namespace }}
-          - name: TARGET_SELECTOR
-            value: app=glooe-grafana
-        command:
-          - "setOwner"
       volumes:
         - name: values-volume
           configMap:
@@ -150,8 +84,6 @@ spec:
             items:
             - key: "marketplace.yaml"
               path: "marketplace.yaml"
-            - key: "marketplace-enterprise.yaml"
-              path: "marketplace-enterprise.yaml"
       restartPolicy: Never
   backoffLimit: 4
 {{- end }} # marketplaceResources

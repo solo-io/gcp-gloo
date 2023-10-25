@@ -9,8 +9,6 @@ rbac: false
 # it must be on in order to install marketplace resources
 marketplaceResources: true
 
-enterpriseLicense: "set-by-marketplace"
-
 glooctlInstaller:
   serviceAccount: glooctl-installer
   # unlike our common helm charts, we pass the image in full

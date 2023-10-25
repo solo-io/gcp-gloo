@@ -14,18 +14,6 @@ properties:
     default: gcr.io/solo-io-public/gloo/installer:1.4.0
     x-google-marketplace:
       type: IMAGE
-# accessible as: {{ .Values.enterpriseLicense }}
-  enterpriseLicense:
-    type: string
-    # set this for testing
-    # default: "temp"
-    default: ""
-    x-google-marketplace:
-      type: STRING
-      string:
-        generatedProperties:
-# accessible as {{ .Values.enterpriseLicenseEncoded }}
-          base64Encoded: enterpriseLicenseEncoded
 # the name used here will lowercased and "-" appended to the install name
 # ex: operatorServiceAccount would become "test-install-operatorserviceaccount" when installed in .Release.Name="test-install"
   glooctlServiceAccount:
