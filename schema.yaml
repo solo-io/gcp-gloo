@@ -11,7 +11,7 @@ properties:
       type: NAMESPACE
   glooctlInstaller.image.full:
     type: string
-    default: gcr.io/solo-io-public/gloo/installer:1.4.0
+    default: gcr.io/solo-io-public/gloo/installer:1.15.14
     x-google-marketplace:
       type: IMAGE
 # the name used here will lowercased and "-" appended to the install name
