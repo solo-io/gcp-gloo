@@ -1,25 +1,30 @@
 FROM alpine
 
+ARG GLOO_VERSION
+ARG GLOOE_VERSION
+ARG KUBE_MINOR_VERSION=1.27
+ARG KUBE_PATCH_VERSION=0
+
 # install glooctl
-# TODO: templatize with the version
-RUN wget https://github.com/solo-io/gloo/releases/download/v1.3.21/glooctl-linux-amd64
+RUN wget https://github.com/solo-io/gloo/releases/download/v$GLOO_VERSION/glooctl-linux-amd64
 RUN chmod +x glooctl-linux-amd64
 RUN mv glooctl-linux-amd64 /bin/glooctl
 RUN glooctl version
 
 RUN mkdir /var/gloo/
-RUN wget https://storage.googleapis.com/solo-public-helm/charts/gloo-1.3.21.tgz
-RUN mv gloo-1.3.21.tgz /var/gloo/gloo-1.3.21.tgz
+RUN wget https://storage.googleapis.com/solo-public-helm/charts/gloo-$GLOO_VERSION.tgz
+RUN mv gloo-$GLOO_VERSION.tgz /var/gloo/gloo.tgz
+
 # NOTE: rectify versions when v1.2 is available
-RUN wget https://storage.googleapis.com/gloo-ee-helm/charts/gloo-ee-1.3.2.tgz
-RUN mv gloo-ee-1.3.2.tgz /var/gloo/gloo-ee-1.3.2.tgz
+RUN wget https://storage.googleapis.com/gloo-ee-helm/charts/gloo-ee-$GLOOE_VERSION.tgz
+RUN mv gloo-ee-$GLOOE_VERSION.tgz /var/gloo/gloo-ee.tgz
 
 
-RUN mkdir -p /opt/kubectl/1.16 \
-    && wget -q -O /opt/kubectl/1.16/kubectl \
-        https://storage.googleapis.com/kubernetes-release/release/v1.16.2/bin/linux/amd64/kubectl \
-    && chmod 755 /opt/kubectl/1.16/kubectl
-RUN mv /opt/kubectl/1.16/kubectl /bin/kubectl
+RUN mkdir -p /opt/kubectl/$KUBE_MINOR_VERSION \
+    && wget -q -O /opt/kubectl/$KUBE_MINOR_VERSION/kubectl \
+        https://storage.googleapis.com/kubernetes-release/release/v$KUBE_MINOR_VERSION.$KUBE_PATCH_VERSION/bin/linux/amd64/kubectl \
+    && chmod 755 /opt/kubectl/$KUBE_MINOR_VERSION/kubectl
+RUN mv /opt/kubectl/$KUBE_MINOR_VERSION/kubectl /bin/kubectl
 
 # script used to set owner refs
 COPY scripts/setOwner /bin/setOwner

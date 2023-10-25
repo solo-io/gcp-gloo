@@ -3,20 +3,41 @@ REGISTRY := gcr.io/solo-io-public
 APP_NAME := gloo
 DEPLOYER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/deployer
 INSTALLER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/installer
-DEPLOYER_IMAGE_VERSION := 1.3
+DEPLOYER_IMAGE_VERSION := 1.4
+
+# The following are the versions of the images that will be used in the marketplace
+GLOO_VERSION := 1.15.0
+GLOOE_VERSION := 1.15.0
+
+.PHONY: docker-build
+docker-build: docker-build-installer docker-build-deployer
+
+.PHONY: docker-build-installer
+docker-build-installer:
+	docker build \
+		-t $(INSTALLER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION) \
+		--build-arg GLOO_VERSION=$(GLOO_VERSION) \
+		--build-arg GLOOE_VERSION=$(GLOOE_VERSION) \
+		-f installer/Dockerfile \
+		installer
+
+.PHONY: docker-build-deployer
+docker-build-deployer:
+	docker build \
+		-t $(DEPLOYER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION) \
+		-f Dockerfile \
+		. --no-cache
 
 .PHONY: docker-push
-docker-push: docker-push-glooctl docker-push-deployer
+docker-push: docker-push-installer docker-push-deployer
 
 .PHONY: docker-push-deployer
 docker-push-deployer:
-	REGISTRY=$(REGISTRY) APP_NAME=$(APP_NAME) docker build -t $(DEPLOYER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION) -f Dockerfile . --no-cache
 	docker push $(DEPLOYER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION)
 
 # glooctl installer
-.PHONY: docker-push-glooctl
-docker-push-glooctl:
-	docker build -t $(INSTALLER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION) -f installer/Dockerfile installer
+.PHONY: docker-push-installer
+docker-push-installer:
 	docker push $(INSTALLER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION)
 
 .PHONY: mpdev-doctor
