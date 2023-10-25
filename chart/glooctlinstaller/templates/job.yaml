@@ -15,12 +15,8 @@ data:
         namespaced: true
     settings:
       singleNamespace: true
-      create: true
     gloo:
-      logLevel: info
       disableLeaderElection: true
-      deployment:
-        replicas: 1
     gateway:
       certGenJob:
         enabled: false
