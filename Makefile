@@ -44,7 +44,8 @@ docker-push-installer:
 mpdev-doctor:
 	REGISTRY=$(REGISTRY) mpdev doctor
 
-TEST_NS:=test-ns-1-2
+TEST_NS ?= test-ns-1-2
+
 .PHONY: test-install
 test-install:
 	kubectl create namespace $(TEST_NS)
@@ -55,6 +56,10 @@ test-install:
 	mpdev /scripts/install \
   --deployer=$(REGISTRY)/$(APP_NAME)/deployer:$(DEPLOYER_IMAGE_VERSION) \
   --parameters='{"name": "test-install", "namespace": "$(TEST_NS)"}'
+
+.PHONY: test-uninstall
+test-uininstall:
+	kubectl delete namespace $(TEST_NS)
 
 # copy all the gloo images into the marketplace repo
 .PHONY: docker-mirror

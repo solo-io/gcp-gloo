@@ -38,7 +38,7 @@ EOM
 TARGET_META_JSONPATH="{range .items[*]}{.metadata.name} {end}"
 # this list purposely excludes pods, as they use their creator (deployment, job, etc. as an owner ref)
 # may need to add more types here going forward
-OWNED_KINDS="Deployment Job ReplicaSet Service ServiceAccount"
+OWNED_KINDS="Deployment Job ReplicaSet Service ServiceAccount Role RoleBinding"
 for KIND in $OWNED_KINDS
 do
     NAMES=`kubectl get $KIND -n $NAMESPACE --selector=$TARGET_SELECTOR -o jsonpath="$TARGET_META_JSONPATH"`
