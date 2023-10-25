@@ -16,6 +16,14 @@ x-google-marketplace:
     # to update as soon as possible.
     recommended: true
 
+  # Image declaration is required here.
+  images:
+    installer:
+      properties:
+        imageInstallerFull:
+          default: gcr.io/solo-io-public/gloo/installer:1.15.14
+          type: FULL
+
 # The Properties and Required sections of v2 are structured the same as those of v1.
 properties:
   name:
@@ -26,13 +34,8 @@ properties:
     type: string
     x-google-marketplace:
       type: NAMESPACE
-  glooctlInstaller.image.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/installer:1.15.14
-    x-google-marketplace:
-      type: IMAGE
-# the name used here will lowercased and "-" appended to the install name
-# ex: operatorServiceAccount would become "test-install-operatorserviceaccount" when installed in .Release.Name="test-install"
+  # the name used here will lowercased and "-" appended to the install name
+  # ex: operatorServiceAccount would become "test-install-operatorserviceaccount" when installed in .Release.Name="test-install"
   glooctlServiceAccount:
     type: string
     x-google-marketplace:

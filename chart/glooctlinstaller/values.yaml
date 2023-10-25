@@ -9,16 +9,4 @@ rbac: false
 # it must be on in order to install marketplace resources
 marketplaceResources: true
 
-glooctlInstaller:
-  serviceAccount: glooctl-installer
-  # unlike our common helm charts, we pass the image in full
-  # this is because the marketplace helper splitToRegistryRepoTag produces:
-  #  {registry: solo-io-public, repository: gloo/installer, tag: 1.2}
-  #  and the "gcr.io" prefix is ignored (I expected it in the registry string)
-  #  which means that we either need to restrict alternative images to gcr.io hosts or implement
-  #  an elaborate template function to allow other hosts
-  image:
-    # set by marketplace
-    # full: gcr.io/solo-io-public/gloo/installer:1.3
-    pullPolicy: Always
-
+glooctlServiceAccount: glooctl-installer

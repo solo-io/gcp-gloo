@@ -45,7 +45,7 @@ spec:
       serviceAccount: {{ .Values.glooctlServiceAccount }}
       initContainers:
       - name: glooctl-installer
-        image: {{ .Values.glooctlInstaller.image.full }}
+        image: {{ .Values.imageInstallerFull }}
         imagePullPolicy: Always
         command:
           - "glooctl"
@@ -62,7 +62,7 @@ spec:
             mountPath: /var/gloo/install-values
       containers:
       - name: glooctl-installer-own-resources
-        image: {{ .Values.glooctlInstaller.image.full }}
+        image: {{ .Values.imageInstallerFull }}
         imagePullPolicy: Always
         env:
           - name: APP_NAME
