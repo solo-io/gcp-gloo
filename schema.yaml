@@ -11,153 +11,9 @@ properties:
       type: NAMESPACE
   glooctlInstaller.image.full:
     type: string
-    default: gcr.io/solo-io-public/gloo/installer:1.3
+    default: gcr.io/solo-io-public/gloo/installer:1.4-beta1
     x-google-marketplace:
       type: IMAGE
-  glooImages.gloo.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooImages.gloo.registry
-            repo: glooImages.gloo.repository
-            tag: glooImages.gloo.tag
-  glooImages.discovery.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/discovery:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooImages.discovery.registry
-            repo: glooImages.discovery.repository
-            tag: glooImages.discovery.tag
-  glooImages.gateway.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/gateway:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooImages.gateway.registry
-            repo: glooImages.gateway.repository
-            tag: glooImages.gateway.tag
-  glooImages.certgen.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/certgen:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooImages.certgen.registry
-            repo: glooImages.certgen.repository
-            tag: glooImages.certgen.tag
-  glooImages.glooEnvoyWrapper.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/gloo-envoy-wrapper:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooImages.glooEnvoyWrapper.registry
-            repo: glooImages.glooEnvoyWrapper.repository
-            tag: glooImages.glooEnvoyWrapper.tag
-  glooImages.accessLogger.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/access-logger:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooImages.accessLogger.registry
-            repo: glooImages.accessLogger.repository
-            tag: glooImages.accessLogger.tag
-## GLOOE Images
-  glooeImages.apiServerProxy.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/grpcserver-envoy:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooeImages.apiServerProxy.registry
-            repo: glooeImages.apiServerProxy.repository
-            tag: glooeImages.apiServerProxy.tag
-  glooeImages.apiServerBackend.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/grpcserver-ee:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooeImages.apiServerBackend.registry
-            repo: glooeImages.apiServerBackend.repository
-            tag: glooeImages.apiServerBackend.tag
-  glooeImages.apiServerFrontend.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/grpcserver-ui:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooeImages.apiServerFrontend.registry
-            repo: glooeImages.apiServerFrontend.repository
-            tag: glooeImages.apiServerFrontend.tag
-  glooeImages.apiRateLimit.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/rate-limit-ee:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooeImages.rateLimit.registry
-            repo: glooeImages.rateLimit.repository
-            tag: glooeImages.rateLimit.tag
-  glooeImages.redis.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/redis:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooeImages.redis.registry
-            repo: glooeImages.redis.repository
-            tag: glooeImages.redis.tag
-  glooeImages.observability.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/observability-ee:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooeImages.observability.registry
-            repo: glooeImages.observability.repository
-            tag: glooeImages.observability.tag
-  glooeImages.extAuth.full:
-    type: string
-    default: gcr.io/solo-io-public/gloo/extauth-ee:1.3
-    x-google-marketplace:
-      type: IMAGE
-      image:
-        generatedProperties:
-          splitToRegistryRepoTag:
-            registry: glooeImages.extAuth.registry
-            repo: glooeImages.extAuth.repository
-            tag: glooeImages.extAuth.tag
 # accessible as: {{ .Values.enterpriseLicense }}
   enterpriseLicense:
     type: string
@@ -177,13 +33,8 @@ properties:
     x-google-marketplace:
       type: SERVICE_ACCOUNT
       serviceAccount:
+        description: Service account used by glooctl to install Gloo
         roles:
-        - type: ClusterRole        # This is a cluster-wide ClusterRole
-          rulesType: PREDEFINED
-          rulesFromRoleName: cluster-admin  # Use predefined role named "edit"
-        # - type: ClusterRole        # This is a cluster-wide ClusterRole
-        #   rulesType: PREDEFINED
-        #   rulesFromRoleName: edit  # Use predefined role named "edit"
         - type: Role               # This is a namespaced Role
           rulesType: CUSTOM        # We specify our own custom RBAC rules
           rules:

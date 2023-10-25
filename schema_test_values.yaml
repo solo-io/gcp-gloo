@@ -4,8 +4,8 @@ properties:
     type: string
     # without modification, the schema's "default" value is an empty string
     # toggle these lines to force the verification script to use gloo vs. glooE
-    # default: ""
-    default: "test-schema-license-value"
+    default: ""
+    # default: "test-schema-license-value"
     x-google-marketplace:
       type: STRING
       string:
