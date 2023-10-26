@@ -26,11 +26,15 @@ docker-build-installer:
 		installer
 
 .PHONY: docker-build-deployer
-docker-build-deployer:
+docker-build-deployer: patch-helm
 	docker build \
 		-t $(DEPLOYER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION) \
 		-f Dockerfile \
 		. --no-cache
+
+.PHONY: patch-helm
+patch-helm:
+	./patch-helm.sh
 
 #----------------------------------------------------------------------------------
 # Publish
@@ -76,7 +80,3 @@ test-install:
 .PHONY: test-uninstall
 test-uninstall:
 	kubectl delete namespace $(TEST_NS)
-
-.PHONY: patch-helm
-patch-helm:
-	./patch-helm.sh
