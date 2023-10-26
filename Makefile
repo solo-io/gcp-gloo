@@ -36,8 +36,7 @@ docker-build-deployer:
 #----------------------------------------------------------------------------------
 
 .PHONY: publish
-publish: docker-build
-publish: docker-push
+publish: docker-build docker-push
 
 .PHONY: docker-push
 docker-push: docker-push-installer docker-push-deployer
@@ -61,7 +60,7 @@ mpdev-doctor:
 
 .PHONY: mpdev-verify
 mpdev-verify:
-		mpdev /scripts/verify --deployer=gcr.io/solo-io-public/gloo/deployer:$(DEPLOYER_IMAGE_VERSION)
+	mpdev /scripts/verify --deployer=gcr.io/solo-io-public/gloo/deployer:$(DEPLOYER_IMAGE_VERSION)
 
 TEST_NS ?= test-ns-1-2
 
@@ -74,7 +73,7 @@ test-install:
   --parameters='{"name": "test-install", "namespace": "$(TEST_NS)"}'
 
 .PHONY: test-uninstall
-test-uininstall:
+test-uninstall:
 	kubectl delete namespace $(TEST_NS)
 
 

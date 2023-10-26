@@ -7,11 +7,10 @@ x-google-marketplace:
   applicationApiVersion: v1beta1
 
   # The release version is required in the schema and MUST match the
-  # release tag on the the deployer.
+  # release tag on the deployer.
   publishedVersion: '1.15.14'
   publishedVersionMetadata:
-    releaseNote: >-
-      Latest release.
+    releaseNote: Latest Gloo release.
     # Setting "recommended" to "true" indicates that users are encouraged
     # to update as soon as possible.
     recommended: true
@@ -96,7 +95,6 @@ properties:
           - apiGroups: ["extensions/v1beta1"]
             resources: ["*"]
             verbs: ["*"]
-
 required:
 - name
 - namespace
