@@ -1,75 +1,79 @@
-
 REGISTRY := gcr.io/solo-io-public
 APP_NAME := gloo
 DEPLOYER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/deployer
 INSTALLER_IMAGE_REPO := $(REGISTRY)/$(APP_NAME)/installer
-DEPLOYER_IMAGE_VERSION := 1.3
+
+# The version of Gloo Edge that will be installed by the deployer/installer
+GLOO_VERSION := 1.15.14
+
+# For simplicity, the deployer version matches the underlying Gloo Edge version
+DEPLOYER_IMAGE_VERSION := $(GLOO_VERSION)
+
+#----------------------------------------------------------------------------------
+# Build
+#----------------------------------------------------------------------------------
+
+.PHONY: docker-build
+docker-build: docker-build-installer docker-build-deployer
+
+.PHONY: docker-build-installer
+docker-build-installer:
+	docker build \
+		-t $(INSTALLER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION) \
+		--build-arg GLOO_VERSION=$(GLOO_VERSION) \
+		-f installer/Dockerfile \
+		installer
+
+.PHONY: docker-build-deployer
+docker-build-deployer:
+	docker build \
+		-t $(DEPLOYER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION) \
+		-f Dockerfile \
+		. --no-cache
+
+#----------------------------------------------------------------------------------
+# Publish
+#----------------------------------------------------------------------------------
+
+.PHONY: publish
+publish: docker-build docker-push
 
 .PHONY: docker-push
-docker-push: docker-push-glooctl docker-push-deployer
+docker-push: docker-push-installer docker-push-deployer
 
 .PHONY: docker-push-deployer
 docker-push-deployer:
-	REGISTRY=$(REGISTRY) APP_NAME=$(APP_NAME) docker build -t $(DEPLOYER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION) -f Dockerfile . --no-cache
 	docker push $(DEPLOYER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION)
 
-# glooctl installer
-.PHONY: docker-push-glooctl
-docker-push-glooctl:
-	docker build -t $(INSTALLER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION) -f installer/Dockerfile installer
+.PHONY: docker-push-installer
+docker-push-installer:
 	docker push $(INSTALLER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION)
+
+
+#----------------------------------------------------------------------------------
+# Test / Verify
+#----------------------------------------------------------------------------------
 
 .PHONY: mpdev-doctor
 mpdev-doctor:
 	REGISTRY=$(REGISTRY) mpdev doctor
 
-TEST_NS:=test-ns-1-2
+.PHONY: mpdev-verify
+mpdev-verify:
+	mpdev /scripts/verify --deployer=gcr.io/solo-io-public/gloo/deployer:$(DEPLOYER_IMAGE_VERSION)
+
+TEST_NS ?= test-ns-1-2
+
 .PHONY: test-install
 test-install:
 	kubectl create namespace $(TEST_NS)
-# for now, do this to create the service accounts needed for the installer
-#	helm template chart/glooctlinstaller/ --name test --namespace $(TEST_NS) --set rbac=true,marketplaceResources=false | kubectl apply -f -
-# note that we can subsitute name and namespace only
-# other values will be set from defaults during the below test command:
+
 	mpdev /scripts/install \
   --deployer=$(REGISTRY)/$(APP_NAME)/deployer:$(DEPLOYER_IMAGE_VERSION) \
   --parameters='{"name": "test-install", "namespace": "$(TEST_NS)"}'
 
-# copy all the gloo images into the marketplace repo
-.PHONY: docker-mirror
-docker-mirror:
-	go run scripts/sync_images/main.go
-
-
-.PHONY: cleanup-cluster.
-cleanup-cluster:
+.PHONY: test-uninstall
+test-uninstall:
 	kubectl delete namespace $(TEST_NS)
-	kubectl delete clusterrolebinding gloo-resource-mutator-binding-$(TEST_NS)
-	kubectl delete clusterrolebinding gloo-resource-reader-binding-$(TEST_NS)
-	kubectl delete clusterrolebinding gloo-upstream-mutator-binding-$(TEST_NS)
-	kubectl delete clusterrolebinding settings-user-binding-$(TEST_NS)
-	kubectl delete clusterrolebinding gateway-resource-reader-binding-$(TEST_NS)
-	kubectl delete clusterrolebinding kube-resource-watcher-binding-$(TEST_NS)
-	kubectl delete clusterrole gateway-resource-reader-$(TEST_NS)
-	kubectl delete clusterrole gloo-resource-mutator-$(TEST_NS)
-	kubectl delete clusterrole gloo-resource-reader-$(TEST_NS)
-	kubectl delete clusterrole gloo-upstream-mutator-$(TEST_NS)
-	kubectl delete clusterrole kube-resource-watcher-$(TEST_NS)
-	kubectl delete clusterrole settings-user-$(TEST_NS)
-	kubectl delete clusterrole apiserver-ui-$(TEST_NS)
-	kubectl delete clusterrole gloo-glooe-prometheus-alertmanager
-	kubectl delete clusterrole gloo-glooe-prometheus-pushgateway
-	kubectl delete clusterrole glooe-prometheus-kube-state-metrics
-	kubectl delete clusterrole glooe-prometheus-server
-	kubectl delete clusterrole observability-upstream-role-$(TEST_NS)
-	kubectl delete clusterrolebinding apiserver-ui-role-binding-$(TEST_NS)
-	kubectl delete clusterrolebinding gloo-glooe-prometheus-alertmanager
-	kubectl delete clusterrolebinding gloo-glooe-prometheus-pushgateway
-	kubectl delete clusterrolebinding glooe-prometheus-kube-state-metrics
-	kubectl delete clusterrolebinding glooe-prometheus-server
-	kubectl delete clusterrolebinding glooe-settings-user-role-binding-$(TEST_NS)
-	kubectl delete clusterrolebinding observability-upstream-rolebinding-$(TEST_NS)
 
-.PHONY: mpdev-verify
-mpdev-verify:
-		mpdev /scripts/verify   --deployer=gcr.io/solo-io-public/gloo/deployer:$(DEPLOYER_IMAGE_VERSION)
+

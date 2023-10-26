@@ -13,7 +13,7 @@ metadata:
 spec:
   descriptor:
     type: Gloo
-    version: '1.3'
+    version: '1.15.14'
   selector:
     matchLabels:
       app.kubernetes.io/name: "{{ .Release.Name }}"

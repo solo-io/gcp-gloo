@@ -6,132 +6,33 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   "marketplace.yaml": >-
-    gloo:
-      deployment:
-        image:
-          registry: {{ .Values.glooImages.gloo.registry }}
-          repository: {{ .Values.glooImages.gloo.repository }}
-          tag: {{ .Values.glooImages.gloo.tag }}
-    discovery:
-      deployment:
-        image:
-          registry: {{ .Values.glooImages.discovery.registry }}
-          repository: {{ .Values.glooImages.discovery.repository }}
-          tag: {{ .Values.glooImages.discovery.tag }}
-    gateway:
-      deployment:
-        image:
-          registry: {{ .Values.glooImages.gateway.registry }}
-          repository: {{ .Values.glooImages.gateway.repository }}
-          tag: {{ .Values.glooImages.gateway.tag }}
-      certGenJob:
-        image:
-          registry: {{ .Values.glooImages.certgen.registry }}
-          repository: {{ .Values.glooImages.certgen.repository }}
-          tag: {{ .Values.glooImages.certgen.tag }}
-    accessLogger:
-      deployment:
-        image:
-          registry: {{ .Values.glooImages.accessLogger.registry }}
-          repository: {{ .Values.glooImages.accessLogger.repository }}
-          tag: {{ .Values.glooImages.accessLogger.tag }}
-    gatewayProxies:
-      gatewayProxy:
-        podTemplate:
-          image:
-            registry: {{ .Values.glooImages.glooEnvoyWrapper.registry }}
-            repository: {{ .Values.glooImages.glooEnvoyWrapper.repository }}
-            tag: {{ .Values.glooImages.glooEnvoyWrapper.tag }}
-  "marketplace-enterprise.yaml": >-
     global:
       image:
-        registry: gcr.io/solo-io-public
+        registry: gcr.io/gloo-edge
         pullPolicy: IfNotPresent
-        pullSecret: solo-io-readerbot-pull-secret
-      extensions:
-        extAuth:
-          deployment:
-            image:
-              registry: {{ .Values.glooeImages.extAuth.registry }}
-              repository: {{ .Values.glooeImages.extAuth.repository }}
-              tag: {{ .Values.glooeImages.extAuth.tag }}
-    apiServer:
-      deployment:
-        envoy:
-          image:
-            registry: {{ .Values.glooeImages.apiServerProxy.registry }}
-            repository: {{ .Values.glooeImages.apiServerProxy.repository }}
-            tag: {{ .Values.glooeImages.apiServerProxy.tag }}
-        server:
-          image:
-            pullPolicy: IfNotPresent
-            registry: {{ .Values.glooeImages.apiServerBackend.registry }}
-            repository: {{ .Values.glooeImages.apiServerBackend.repository }}
-            tag: {{ .Values.glooeImages.apiServerBackend.tag }}
-        ui:
-          image:
-            pullPolicy: IfNotPresent
-            registry: {{ .Values.glooeImages.apiServerFrontend.registry }}
-            repository: {{ .Values.glooeImages.apiServerFrontend.repository }}
-            tag: {{ .Values.glooeImages.apiServerFrontend.tag }}
-    rateLimit:
-      deployment:
-        image:
-          registry: {{ .Values.glooeImages.rateLimit.registry }}
-          repository: {{ .Values.glooeImages.rateLimit.repository }}
-          tag: {{ .Values.glooeImages.rateLimit.tag }}
-    redis:
-      deployment:
-        image:
-          registry: {{ .Values.glooeImages.redis.registry }}
-          repository: {{ .Values.glooeImages.redis.repository }}
-          tag: {{ .Values.glooeImages.redis.tag }}
-    observability:
-      # TODO enable
-      enabled: false
-    prometheus:
-      # TODO enable
-      enabled: false
-    grafana:
-      # TODO enable
-      enabled: false
+        extended: false
+      glooRbac:
+        namespaced: true
+    settings:
+      singleNamespace: true
     gloo:
-      gloo:
-        deployment:
-          image:
-            registry: {{ .Values.glooImages.gloo.registry }}
-            repository: {{ .Values.glooImages.gloo.repository }}
-            tag: {{ .Values.glooImages.gloo.tag }}
-      discovery:
-        deployment:
-          image:
-            registry: {{ .Values.glooImages.discovery.registry }}
-            repository: {{ .Values.glooImages.discovery.repository }}
-            tag: {{ .Values.glooImages.discovery.tag }}
-      gateway:
-        deployment:
-          image:
-            registry: {{ .Values.glooImages.gateway.registry }}
-            repository: {{ .Values.glooImages.gateway.repository }}
-            tag: {{ .Values.glooImages.gateway.tag }}
-        certGenJob:
-          image:
-            registry: {{ .Values.glooImages.certgen.registry }}
-            repository: {{ .Values.glooImages.certgen.repository }}
-            tag: {{ .Values.glooImages.certgen.tag }}
-      accessLogger:
-        deployment:
-          image:
-            registry: {{ .Values.glooImages.accessLogger.registry }}
-            repository: {{ .Values.glooImages.accessLogger.repository }}
-            tag: {{ .Values.glooImages.accessLogger.tag }}
-      gatewayProxies:
-        gatewayProxy:
-          podTemplate:
-            image:
-              registry: {{ .Values.glooImages.glooEnvoyWrapper.registry }}
-              repository: {{ .Values.glooImages.glooEnvoyWrapper.repository }}
-              tag: {{ .Values.glooImages.glooEnvoyWrapper.tag }}
+      disableLeaderElection: true
+    gateway:
+      certGenJob:
+        enabled: false
+      cleanupJob:
+        enabled: false
+      rolloutJob:
+        enabled: false
+      validation:
+        enabled: false
+        webhook:
+          enabled: false
+    discovery:
+      enabled: false
+    gatewayProxies:
+      gatewayProxy:
+        disabled: true
 ---
 apiVersion: batch/v1
 kind: Job
@@ -144,26 +45,16 @@ spec:
       serviceAccount: {{ .Values.glooctlServiceAccount }}
       initContainers:
       - name: glooctl-installer
-        image: {{ .Values.glooctlInstaller.image.full }}
+        image: {{ .Values.imageInstallerFull }}
         imagePullPolicy: Always
         command:
           - "glooctl"
           - "install"
           - "gateway"
-          {{- if .Values.enterpriseLicense }}
-          - "enterprise"
-          - "--license-key"
-          - {{ .Values.enterpriseLicense }}
           - "--file"
-          - "/var/gloo/gloo-ee-1.3.2.tgz"
-          - "--values"
-          - /var/gloo/install-values/marketplace-enterprise.yaml
-          {{- else }} # enterpriseLicense
-          - "--file"
-          - "/var/gloo/gloo-1.3.21.tgz"
+          - "/var/gloo/gloo.tgz"
           - "--values"
           - /var/gloo/install-values/marketplace.yaml
-          {{- end }} # enterpriseLicense
           - "--namespace"
           - {{ .Release.Namespace }}
         volumeMounts:
@@ -171,7 +62,7 @@ spec:
             mountPath: /var/gloo/install-values
       containers:
       - name: glooctl-installer-own-resources
-        image: {{ .Values.glooctlInstaller.image.full }}
+        image: {{ .Values.imageInstallerFull }}
         imagePullPolicy: Always
         env:
           - name: APP_NAME
@@ -182,19 +73,6 @@ spec:
             value: gloo
         command: 
           - "setOwner"
-      # grafana is a subchart so it does not have the "gloo" label
-      - name: glooctl-installer-own-grafana
-        image: {{ .Values.glooctlInstaller.image.full }}
-        imagePullPolicy: Always
-        env:
-          - name: APP_NAME
-            value: {{ .Release.Name }}
-          - name: NAMESPACE
-            value: {{ .Release.Namespace }}
-          - name: TARGET_SELECTOR
-            value: app=glooe-grafana
-        command:
-          - "setOwner"
       volumes:
         - name: values-volume
           configMap:
@@ -202,8 +80,6 @@ spec:
             items:
             - key: "marketplace.yaml"
               path: "marketplace.yaml"
-            - key: "marketplace-enterprise.yaml"
-              path: "marketplace-enterprise.yaml"
       restartPolicy: Never
   backoffLimit: 4
 {{- end }} # marketplaceResources
