@@ -1,8 +1,14 @@
 #!/bin/sh -xe
 
-# This script applies an owner ref to the resources that match the provided selector
+# This script applies an owner ref to the resources that match the provided selector.
 # The owner ref is the Application specified by NAMESPACE and APP_NAME
 # Any resources (apart from Pods) which match the --selector=$TARGET_SELECTOR are updated
+#
+# IMPORTANT: This is required in order for resources to be cleaned up correctly when the application is
+# uninstalled. If that does not happen, the `mpdev verify` command will fail.
+# Usually the deployer would automatically set owner references on the resources it creates, as it assumes those are
+# the ones that make up the application. In our case though, we create a `Job` that in turn creates the actual
+# Gloo resources; so we need this additional step to then set the owner references on them.
 
 # assert parameters
 if [ -z $NAMESPACE ]; then
