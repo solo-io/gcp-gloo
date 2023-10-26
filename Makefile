@@ -22,6 +22,7 @@ docker-build-installer:
 		-t $(INSTALLER_IMAGE_REPO):$(DEPLOYER_IMAGE_VERSION) \
 		--build-arg GLOO_VERSION=$(GLOO_VERSION) \
 		-f installer/Dockerfile \
+		--platform linux/amd64 \
 		installer
 
 .PHONY: docker-build-deployer
