@@ -1,8 +1,8 @@
 FROM alpine
 
 ARG GLOO_VERSION
-ARG KUBE_MINOR_VERSION=1.27
-ARG KUBE_PATCH_VERSION=0
+ARG KUBE_MINOR_VERSION=1.28
+ARG KUBE_PATCH_VERSION=3
 
 # install glooctl
 RUN wget https://github.com/solo-io/gloo/releases/download/v$GLOO_VERSION/glooctl-linux-amd64
