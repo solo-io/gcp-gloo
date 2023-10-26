@@ -16,3 +16,6 @@ RUN for full_version in 1.28.3;  \
         && chmod 755 /opt/kubectl/$version/kubectl; \
      done;
 RUN ln -s /opt/kubectl/1.28 /opt/kubectl/default
+
+# Overwrite existing helm binary with one that patches [GHSA-m425-mq94-257g](https://github.com/advisories/GHSA-m425-mq94-257g)
+COPY helm /bin/helm

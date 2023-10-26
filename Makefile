@@ -77,4 +77,6 @@ test-install:
 test-uninstall:
 	kubectl delete namespace $(TEST_NS)
 
-
+.PHONY: patch-helm
+patch-helm:
+	./patch-helm.sh
